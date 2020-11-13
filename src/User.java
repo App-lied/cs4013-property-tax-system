@@ -1,19 +1,25 @@
-public class User {
+protected class User {
 
-    public User() {
-
-    }
-
-    public String getUsername() {
+    private String username;
+    private String password;
+    protected User() {
 
     }
 
-    public String getPassword() {
-
+    protected void setUsername(String username){
+        this.username = username;
     }
 
-    public boolean getIsAdmin() {
+    protected void setPassword(String password){
+        this.password = password;
+    }
 
+    protected String getUsername() {
+        return this.username;
+    }
+
+    protected String getPassword() {
+        return this.password;
     }
 
 }
