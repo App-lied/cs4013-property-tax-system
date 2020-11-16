@@ -1,3 +1,5 @@
+package src;
+
 public class Payment {
     int year;
     boolean paid;
@@ -7,5 +9,5 @@ public class Payment {
         this.year = year;
         this.paid = paid;
         this.amount = amount;
-    }     
+    }
 }
