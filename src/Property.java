@@ -1,25 +1,28 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Property {
 
-    double estMarketValue;
-    String postcode;
-    String address;
-    String owner;
-    int category;
-    String location;
+    private double estMarketValue;
+    private String postcode;
+    private String address;
+    private String owner;
+    private int category;
+    private String[] locations;
+    private boolean principalResidence;
     private ArrayList<Payment> paymentList = new ArrayList<Payment>();
 
     public Property(){}
 
 
-    public Property(String owner, String address, String postcode, double estMarketValue, int category) {
+    public Property(String owner, String address, String postcode, double estMarketValue, int category, String[] locations, boolean principalResidence, ArrayList<Payment> paymentList) {
         this.owner = owner;
         this.address = address;
         this.postcode = postcode;
         this.estMarketValue = estMarketValue;
-        this.location = location;
+        this.locations = locations;
+        this.category = category;
+        this.principalResidence = principalResidence;
+        this.paymentList = paymentList;
     }
 
     public String getOwner() {    
@@ -38,8 +41,8 @@ public class Property {
         return estMarketValue;
     }
 
-    public String getLocation() {        
-        return location;
+    public String[] getLocations() {        
+        return locations;
     }
 
     public int getLocationCategory() {     
@@ -54,7 +57,11 @@ public class Property {
         return category;
     }
 
-    public ArrayList getPaymentList() {
+    public boolean isPrincipalResidence(){
+        return principalResidence;
+    }
+
+    public ArrayList<Payment> getPaymentList() {
         return paymentList;
     }
 

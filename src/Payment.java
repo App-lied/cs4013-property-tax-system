@@ -8,16 +8,21 @@ public class Payment {
         this.paid = paid;
         this.amount = amount;
     }
-    
-    public int getYear{
+
+    public int getYear() {
         return year;
     }
 
-    public boolean getPaid{
+    public boolean isPaid() {
         return paid;
     }
 
-    public double amount{
+    public double getAmount() {
         return amount;
     }
+
+
+    
+    
+
 }
