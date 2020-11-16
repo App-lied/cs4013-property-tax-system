@@ -46,11 +46,11 @@ public class User {
         }
     }
 
-    protected void setUsername(String username){
+    protected void setUsername(String username) {
         this.username = username;
     }
 
-    protected void setPassword(String password){
+    protected void setPassword(String password) {
         this.password = password;
     }
 
