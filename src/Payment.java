@@ -1,3 +1,5 @@
+package src;
+
 public class Payment {
     private int year;
     private boolean paid;

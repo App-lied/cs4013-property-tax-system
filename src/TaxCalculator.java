@@ -1,3 +1,5 @@
+package src;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -43,11 +45,11 @@ public class TaxCalculator {
     private double getMarketValueTax(){
         int i;
         double marketValueTax = 0;
-        for(i = 0; i < taxBrackets.size(); i++){
-            if(value < taxBrackets.get(i)){
+        for (i = 0; i < taxBrackets.size(); i++) {
+            if (value < taxBrackets.get(i)) {
                 marketValueTax = taxRates.get(i) * value;
                 break;
-            }    
+            }
         }
         return marketValueTax;
     }
@@ -56,7 +58,8 @@ public class TaxCalculator {
         return locationCharges[category];
     }
 
-    // Calculates the tax after penalty by looping through the list of payments and counting the amount of years that the owner hasn't paid tax
+    // Calculates the tax after penalty by looping through the list of payments and
+    // counting the amount of years that the owner hasn't paid tax
     // This may be changed later if we think of a new penalty recording system
     private double taxAfterPenalty(double tax){
         int i;
@@ -67,12 +70,12 @@ public class TaxCalculator {
                 count++;
             }
         }
-        // This for loop keeps adding tax in a compound manner        
-        for(i = 0; i < count; i++){
+        // This for loop keeps adding tax in a compound manner
+        for (i = 0; i < count; i++) {
             tax = tax + 0.07 * tax;
-        }    
+        }
         return tax;
-    }  
+    }
 
     
     
