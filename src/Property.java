@@ -9,63 +9,49 @@ public class Property {
     String owner;
     int category;
     String location;
-    private ArrayList paymentList = new ArrayList();
+    private ArrayList<Payment> paymentList = new ArrayList<Payment>();
 
     public Property(){}
 
 
     public Property(String owner, String address, String postcode, double estMarketValue, int category) {
-
-    }
-
-    public String getOwner() {
-    this.owner = owner;
-    return owner;
-    }
-
-    public String getAddress() {
-    this.address = address;
-    return address;
-    }
-
-    public String getPostcode() {
-    this.postcode = postcode;
-    return postcode;
-    }
-
-    public double getestMarketValue() {
+        this.owner = owner;
+        this.address = address;
+        this.postcode = postcode;
         this.estMarketValue = estMarketValue;
+        this.location = location;
+    }
+
+    public String getOwner() {    
+        return owner;
+    }
+
+    public String getAddress() {    
+        return address;
+    }
+
+    public String getPostcode() {    
+        return postcode;
+    }
+
+    public double getestMarketValue() {        
         return estMarketValue;
     }
 
-    public String getLocations() {
-        this.location = location;
+    public String getLocation() {        
         return location;
     }
 
-    public int getLocationCategory() {
-        Scanner userInput = new Scanner(System.in);
-        int category = userInput.nextInt();
+    public int getLocationCategory() {     
+        
 
-        if(category == 0){
-            System.out.println("You have chosen countryside!");
-        }else if(category == 1){
-            System.out.println("You have chosen a Village!");
-        }else if(category == 2){
-            System.out.println("You have chosen a small town!");
-        }else if(category == 3){
-            System.out.println("You have chosen a large Town!");
-        }else if(category == 4){
-            System.out.println("You have chosen a City!");
-        }
+        //int countryside = 0;
+        //int village = 1;
+        //int smallTown = 2;
+        //int largeTown = 3;
+        //int city = 4;
 
-    //int countryside = 0;
-    //int village = 1;
-    //int smallTown = 2;
-    //int largeTown = 3;
-    //int city = 4;
-
-    return category;
+        return category;
     }
 
     public ArrayList getPaymentList() {
