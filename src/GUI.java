@@ -14,7 +14,7 @@ public class GUI extends JFrame {
     public GUI() {
 
         ImageIcon picture = new ImageIcon("src/image.png");
-        Border border = BorderFactory.createLineBorder(Color.green);
+        Border border = BorderFactory.createLineBorder(Color.green, 10);
         JLabel label = new JLabel();
         label.setText("this is the text i want");
         label.setIcon(picture);
