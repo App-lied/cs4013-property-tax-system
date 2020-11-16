@@ -1,9 +1,9 @@
 package src;
 
 public class Payment {
-    int year;
-    boolean paid;
-    double amount;
+    private int year;
+    private boolean paid;
+    private double amount;
 
     public Payment(int year, boolean paid, double amount) {
         this.year = year;
