@@ -1,7 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.FileWriter;
 public class User {
 
     private String username;
@@ -9,7 +9,7 @@ public class User {
     protected User(String u, String p) {
         username = u;
         password = p;
-        String filename = "lib/users/userlogin.csv";
+        String filename = "src/lib/users/userlogin.csv";
 
         //try to create new csv file and username/password columns if file does not exist
         try {
@@ -17,7 +17,7 @@ public class User {
             if(userDataFile.createNewFile()){
                 System.out.println("File created: " + userDataFile.getName());
                 try{
-                    PrintWriter writer = new PrintWriter(filename);
+                    FileWriter writer = new FileWriter(filename,true);
                     writer.write("username,password\n");
                     writer.close();
                 } catch(FileNotFoundException e) {
@@ -33,7 +33,7 @@ public class User {
 
         //try to write the new user data to file
         try{
-            PrintWriter writer = new PrintWriter(filename);
+            FileWriter writer = new FileWriter(filename,true);
             StringBuilder sb = new StringBuilder();
             sb.append(getUsername());
             sb.append(",");
@@ -41,7 +41,7 @@ public class User {
             sb.append("\n");
             writer.write(sb.toString());
             writer.close();
-        } catch(FileNotFoundException e) {
+        } catch(IOException e) {
             System.out.println(e.getMessage());
         }
     }
