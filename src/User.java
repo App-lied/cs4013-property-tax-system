@@ -1,5 +1,3 @@
-package src;
-
 protected class User {
 
     private String username;
