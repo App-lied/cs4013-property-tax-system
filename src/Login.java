@@ -56,6 +56,7 @@ public class Login {
 
         if(!searchForString(enteredName)){
             PropertyOwner newPO = new PropertyOwner(enteredName, enteredPassword);
+            newPO.writeToFile();
             System.out.println("Account created successfully.");
             run();
 

@@ -9,6 +9,25 @@ public class User {
     protected User(String u, String p) {
         username = u;
         password = p;
+    }
+
+    protected void setUsername(String username) {
+        this.username = username;
+    }
+
+    protected void setPassword(String password) {
+        this.password = password;
+    }
+
+    protected String getUsername() {
+        return this.username;
+    }
+
+    protected String getPassword() {
+        return this.password;
+    }
+
+    protected void writeToFile(){
         String filename = "src/lib/users/userlogin.csv";
 
         //try to create new csv file and username/password columns if file does not exist
@@ -35,31 +54,15 @@ public class User {
         try{
             FileWriter writer = new FileWriter(filename,true);
             StringBuilder sb = new StringBuilder();
-            sb.append(getUsername());
+            sb.append(this.getUsername());
             sb.append(",");
-            sb.append(getPassword());
+            sb.append(this.getPassword());
             sb.append("\n");
             writer.write(sb.toString());
             writer.close();
         } catch(IOException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    protected void setUsername(String username) {
-        this.username = username;
-    }
-
-    protected void setPassword(String password) {
-        this.password = password;
-    }
-
-    protected String getUsername() {
-        return this.username;
-    }
-
-    protected String getPassword() {
-        return this.password;
     }
 
 }
