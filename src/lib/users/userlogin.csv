@@ -1,4 +1,4 @@
-username,password
-alan,12345
-sean,1234
-andrei,54321
+username,password,isAdmin
+alan,12345,false
+sean,1234,false
+andrei,54321,false

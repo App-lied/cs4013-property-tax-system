@@ -43,7 +43,6 @@ public class User {
                     System.out.println(e.getMessage());
                 }
             } else {
-                System.out.println("File already exists.");
             }
         } catch (IOException e){
             System.out.println("An error occured.");
@@ -57,6 +56,7 @@ public class User {
             sb.append(this.getUsername());
             sb.append(",");
             sb.append(this.getPassword());
+            sb.append(",false");
             sb.append("\n");
             writer.write(sb.toString());
             writer.close();
