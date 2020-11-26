@@ -1,4 +1,4 @@
-//A utility class for some commonly used static method in the system
+//A utility class for some commonly used static methods in the system
 
 import java.io.FileNotFoundException;
 import java.util.Scanner;

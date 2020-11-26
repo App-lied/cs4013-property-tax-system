@@ -2,3 +2,5 @@ username,password,isAdmin
 alan,12345,false
 sean,1234,false
 andrei,54321,false
+patrick,4444,false
+admin,123,true

@@ -1,4 +1,4 @@
-package src;
+//package src;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -9,5 +9,11 @@ public class GUI extends Application {
 
     public GUI(String[] args) {
         launch(args);
+
+        
+    }
+
+    public void start(Stage newStage){
+        
     }
 }

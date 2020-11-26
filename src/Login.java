@@ -7,7 +7,7 @@ import java.io.IOException;
 public class Login {
     
     private static File source = new File("src/lib/users/userlogin.csv");
-    private final Scanner in;
+    private Scanner in;
 
     public Login(){
         in = new Scanner(System.in);
@@ -16,16 +16,19 @@ public class Login {
     public void run() throws IOException {
         System.out.println("Press 'L' to login. Press 'U' to create a new account. Press 'Q' to exit.");
 
-        String choice = in.nextLine().toLowerCase();
+        boolean running = true;
 
-        if(choice.equals("l")){
-            login();
-        } else if(choice.equals("u")){
-            createNewUser();
-        } else if(choice.equals("q")){
-            System.out.println("System exiting.");
-        } else{ //for any other inputted key we want the system to keep running
-            run();
+        while(running){
+            String choice = in.nextLine().toLowerCase();
+            
+            if(choice.equals("l")){
+                login();
+            } else if(choice.equals("u")){
+                createNewUser();
+            } else if(choice.equals("q")){
+                System.out.println("System exiting.");
+                running = false;
+            } 
         }
 
     }
@@ -44,15 +47,14 @@ public class Login {
         if(Utils.searchForString(source, combined) && !(combined.equals("username,password"))){
             System.out.println("\nLogin Successful");
 
-            //create a new User object with the login details, the cast it depending on if it's noted as an admin or not in the file
-            User loggedIn = new User(enteredName, enteredPassword);
+            //declare a new User object, then cast it depending on if it's noted as an admin or not in the file
+            User loggedIn;
 
             if(Utils.searchForString(source, combined + ",true")){
-                loggedIn = (Admin)loggedIn;
+                loggedIn = new Admin(enteredName, enteredPassword);
             } else {
-                loggedIn = (PropertyOwner)loggedIn;
+                loggedIn = new PropertyOwner(enteredName, enteredPassword);
             }
-            in.close();
             MainSystem next = new MainSystem();
             next.run(loggedIn);
         } else{
