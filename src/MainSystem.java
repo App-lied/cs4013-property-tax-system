@@ -26,7 +26,7 @@ public class MainSystem {
 
     private void runPropertyOwner(User user) throws IOException{
 
-        System.out.println("Press 'P' to register a new property. Press 'Q' to exit.");
+        System.out.println("Press 'V' to view your properties. Press 'P' to register a new property. Press 'Q' to exit.");
         boolean running = true;
         while(running){
             String choice = in.nextLine().toLowerCase();
@@ -36,10 +36,15 @@ public class MainSystem {
             } else if(choice.equals("q")){
                 System.out.println("System exiting.");
                 running = false;
-                
+            } else if(choice.equals("v")){
+                displayProperties(user);
             }
         }
         System.exit(0);
+    }
+
+    private void displayProperties(User user) throws IOException{
+        
     }
 
     private void registerProperty(User user) throws IOException{

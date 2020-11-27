@@ -76,7 +76,7 @@ public class Property {
                 System.out.println("File created: " + propertyDataFile.getName());
                 try{
                     FileWriter writer = new FileWriter(filename,true);
-                    writer.write("username,password\n");
+                    writer.write("owner,address,postcode,estMarketValue,category,principalResidence,user\n");
                     writer.close();
                 } catch(FileNotFoundException e) {
                     System.out.println(e.getMessage());
