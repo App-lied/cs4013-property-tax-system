@@ -1,5 +1,6 @@
-Property Owner,Address,Postcode,Estimate market value,Location category,Principal Private Residence
-Sean O'Neill,"""CSIS Building UL, Limerick, Ireland""",V94 T9PX,1000000,city,no
-Andrei Smirnoff,"""Bunratty Castle Hotel, Bunratty, Co.Clare, Ireland""",V95 DW9N,12000000,small town,yes
-Alan Phillips,"""271 Hyde Rd, Limerick, Ireland""",V94 H2PP,400000,city,yes
-Patrick McCarthy,"""BalconyHouse, 27 College Road, Galway""",H91 KN56,200000,large town,yes
+owner,address,postcode,estMarketValue,category,principalResidence,user
+Sean O'Neill,CSIS Building UL Limerick Ireland,V94 T9PX,1000000,4,no,sean
+Andrei Smirnoff,Bunratty Castle Hotel Bunratty Clare Ireland,V95 DW9N,12000000,2,yes,andrei
+Alan Phillips,271 Hyde Rd Limerick Ireland,V94 H2PP,400000,4,yes,alan
+Patrick McCarthy,BalconyHouse 27 College Road Galway,H91 KN56,200000,3,yes,patrick
+Alan Phillips,O'Brien's Bridge Co. Clare,V11 F9ZZ,200000.0,0,yes,alan
