@@ -6,6 +6,7 @@ public class User {
 
     private String username;
     private String password;
+
     protected User(String u, String p) {
         username = u;
         password = p;
@@ -27,31 +28,31 @@ public class User {
         return this.password;
     }
 
-    protected void writeToFile(){
+    protected void writeToFile() {
         String filename = "src/lib/users/userlogin.csv";
 
         //try to create new csv file and username/password columns if file does not exist
         try {
             File userDataFile = new File(filename);
-            if(userDataFile.createNewFile()){
+            if (userDataFile.createNewFile()) {
                 System.out.println("File created: " + userDataFile.getName());
-                try{
-                    FileWriter writer = new FileWriter(filename,true);
+                try {
+                    FileWriter writer = new FileWriter(filename, true);
                     writer.write("username,password\n");
                     writer.close();
-                } catch(FileNotFoundException e) {
+                } catch (FileNotFoundException e) {
                     System.out.println(e.getMessage());
                 }
             } else {
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("An error occured.");
             e.printStackTrace();
         }
 
         //try to write the new user data to file
-        try{
-            FileWriter writer = new FileWriter(filename,true);
+        try {
+            FileWriter writer = new FileWriter(filename, true);
             StringBuilder sb = new StringBuilder();
             sb.append(this.getUsername());
             sb.append(",");
@@ -60,7 +61,8 @@ public class User {
             sb.append("\n");
             writer.write(sb.toString());
             writer.close();
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
+}
