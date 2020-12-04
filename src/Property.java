@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Property {
 
@@ -25,7 +26,7 @@ public class Property {
         this.estMarketValue = estMarketValue;
         this.category = category;
         this.principalResidence = principalResidence;
-        paymentList = new ArrayList<Payment>();
+        paymentList = findPayments();
     }
 
     public String getOwner() {
@@ -112,6 +113,32 @@ public class Property {
             System.out.println(e.getMessage());
             System.out.println("Property registration failed.");
         }
+    }
+
+
+    private ArrayList<Payment> findPayments(){
+        String filename = "src/lib/properties/payment_info.csv";
+        ArrayList<Payment> result = new ArrayList<Payment>();
+
+        try {
+            final Scanner scanner = new Scanner(new File(filename));
+
+            while(scanner.hasNextLine()){
+                final String lineFromFile = scanner.nextLine();
+
+                if(lineFromFile.contains(postcode)){
+                    String[] s = lineFromFile.split(",");
+                    result.add(new Payment(Integer.parseInt(s[0]), Double.parseDouble(s[1]),
+                    (s[2].equals("true") ? true : false)));
+                }
+            }
+
+            return result;
+        } catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+
+        return null;
     }
 
 }
