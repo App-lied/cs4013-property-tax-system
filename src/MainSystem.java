@@ -1,12 +1,12 @@
 //a class to handle the terminal implementation of the main user interface
 
 import java.util.Scanner;
-import java.io.File;
+//import java.io.File;
 import java.io.IOException;
 
 public class MainSystem {
     
-    private static File source = new File("src/lib/properties/property_info.csv");
+    //private static File source = new File("src/lib/properties/property_info.csv");
     private Scanner in;
 
     public MainSystem(){

@@ -21,7 +21,9 @@ public class Payment {
         return amount;
     }
 
-
+    public String toString(){
+        return year + "\n€" + amount + "\n" + (paid == true ? "Paid" : "Not paid");
+    }
     
     
 
