@@ -1,8 +1,7 @@
 //a class to handle the terminal implementation of the main user interface
 
+import java.io.*;
 import java.util.Scanner;
-import java.io.File;
-import java.io.IOException;
 
 public class MainSystem {
     
@@ -43,9 +42,23 @@ public class MainSystem {
         System.exit(0);
     }
 
-    private void displayProperties(User user) throws IOException{
-        
-    }
+    private void displayProperties(User user) throws IOException {
+        String path = "src/lib/properties/property_info.csv";
+        String line = "";
+        if(user == user) {
+            try
+                    (BufferedReader br = new BufferedReader(new FileReader(path))) {
+                while ((line = br.readLine()) != null) {
+                    String[] values = line.split(",");
+                    System.out.println("Address is " + values[1]);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        }
 
     private void registerProperty(User user) throws IOException{
         String[] answers = new String[6];
