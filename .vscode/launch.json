@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-LoginGUI<cs4013-property-tax-system_b8b1b081>",
+            "request": "launch",
+            "vmArgs": "--module-path C:/JavaFX/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml", 
+            "mainClass": "LoginGUI",
+            "projectName": "cs4013-property-tax-system_b8b1b081"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Main<cs4013-property-tax-system_b8b1b081>",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "cs4013-property-tax-system_b8b1b081"
+        }
+    ]
+}
