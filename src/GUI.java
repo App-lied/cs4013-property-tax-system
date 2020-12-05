@@ -18,14 +18,10 @@ import javafx.geometry.Pos;
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
     Scene loginScene, HomeScene;
-    Button RegisterProp, ViewProp, Logout;
+    Button RegisterProp, ViewProp, Logout, btLogin;
     static PasswordField passInput;
     static TextField nameInput;
-    static File source = new File("src/lib/users/userlogin.csv");
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+    static File source = new File("src/lib/users/userlogin.csv");    
 
     @Override
     public void start(Stage primaryStage) {
@@ -62,7 +58,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         passInput.setTranslateY(30);
 
         // Enter button
-        Button btLogin = new Button("Login");
+        btLogin = new Button("Login");
         btLogin.setTranslateX(150);
         btLogin.setTranslateY(loginScene.getHeight() - 250);
         LoginHandler login = new LoginHandler();
@@ -121,16 +117,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         if (event.getSource() == RegisterProp) {
             System.out.println("Hallo");
         }
-    }
-}
-
-class LoginHandler implements EventHandler<ActionEvent> {
-    @Override
-    public void handle(ActionEvent e) {
-        try {
-            login();
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        else if(event.getSource() == btLogin){
+            try {
+                login();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }    
         }
     }
 
@@ -158,4 +150,9 @@ class LoginHandler implements EventHandler<ActionEvent> {
         scanner.close();
         return false;
     }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }
+
