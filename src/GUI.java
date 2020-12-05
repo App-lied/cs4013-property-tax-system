@@ -18,20 +18,23 @@ import javafx.geometry.Pos;
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
     Scene loginScene, HomeScene;
-    Button RegisterProp, ViewProp, Logout, btLogin;
+    Button RegisterProp, ViewProp, Logout, btLogin, btCreate;
+    GridPane createPane, loginPane, pane;
     static PasswordField passInput;
     static TextField nameInput;
-    static File source = new File("src/lib/users/userlogin.csv");    
+    static File source = new File("src/lib/users/userlogin.csv");
 
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
         window.setTitle("Home");
-        GridPane pane = new GridPane();
-        GridPane loginPane = new GridPane();
-        GridPane createPane = new GridPane();
+        pane = new GridPane();
+        loginPane = new GridPane();
+        createPane = new GridPane();
         pane.setAlignment(Pos.CENTER);
 
+        loginPane.setAlignment(Pos.CENTER);
+        loginScene = new Scene(loginPane, 320, 420);
         // Login heading
         Text loginHeading = new Text("Login");
         loginHeading.setTranslateX(50);
@@ -65,7 +68,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         btLogin.setOnAction(login);
 
         // Create new account
-        Button btCreate = new Button("Create a new account");
+        btCreate = new Button("Create a new account");
         btCreate.setTranslateX(-65);
         btCreate.setTranslateY(loginScene.getHeight() - 250);
         btCreate.setOnAction(e -> window.setScene(HomeScene));
@@ -108,7 +111,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         pane.getChildren().add(RegisterProp);
         pane.getChildren().add(ViewProp);
         pane.getChildren().add(select);
-        window.setScene(HomeScene);
+        window.setScene(loginScene);
         window.show();
     }
 
@@ -116,13 +119,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         if (event.getSource() == RegisterProp) {
             System.out.println("Hallo");
-        }
-        else if(event.getSource() == btLogin){
+        } else if (event.getSource() == btLogin) {
             try {
                 login();
             } catch (IOException e1) {
                 e1.printStackTrace();
-            }    
+            }
         }
     }
 
@@ -155,4 +157,3 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         launch(args);
     }
 }
-

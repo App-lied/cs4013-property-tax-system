@@ -49,6 +49,7 @@
             "type": "java",
             "name": "Debug (Launch)-HomeGUI<cs4013-property-tax-system_ffe3e5b8>",
             "request": "launch",
+            "vmArgs": "--module-path D:/Java_JFX/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml", 
             "mainClass": "HomeGUI",
             "projectName": "cs4013-property-tax-system_ffe3e5b8"
         },
@@ -56,6 +57,7 @@
             "type": "java",
             "name": "Debug (Launch)-LoginGUI<cs4013-property-tax-system_ffe3e5b8>",
             "request": "launch",
+            "vmArgs": "--module-path D:/Java_JFX/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml", 
             "mainClass": "LoginGUI",
             "projectName": "cs4013-property-tax-system_ffe3e5b8"
         },
@@ -64,6 +66,14 @@
             "name": "Debug (Launch)-Main<cs4013-property-tax-system_ffe3e5b8>",
             "request": "launch",
             "mainClass": "Main",
+            "projectName": "cs4013-property-tax-system_ffe3e5b8"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-RegisterProp<cs4013-property-tax-system_ffe3e5b8>",
+            "request": "launch",
+            "vmArgs": "--module-path D:/Java_JFX/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml", 
+            "mainClass": "RegisterProp",
             "projectName": "cs4013-property-tax-system_ffe3e5b8"
         }
     ]
