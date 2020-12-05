@@ -15,26 +15,21 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 
-public class GUI extends Application implements EventHandler<ActionEvent> {
-    Stage window;
-    Scene loginScene, HomeScene;
-    Button RegisterProp, ViewProp, Logout;
+public class LoginGUI extends Application {
     static PasswordField passInput;
     static TextField nameInput;
     static File source = new File("src/lib/users/userlogin.csv");
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+    Stage window;
+    Scene loginScene, createScene;
 
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
-        window.setTitle("Home");
-        GridPane pane = new GridPane();
         GridPane loginPane = new GridPane();
         GridPane createPane = new GridPane();
-        pane.setAlignment(Pos.CENTER);
+        createScene = new Scene(createPane, 320, 420);
+        loginPane.setAlignment(Pos.CENTER);
+        loginScene = new Scene(loginPane, 320, 420);
 
         // Login heading
         Text loginHeading = new Text("Login");
@@ -72,34 +67,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         Button btCreate = new Button("Create a new account");
         btCreate.setTranslateX(-65);
         btCreate.setTranslateY(loginScene.getHeight() - 250);
-        btCreate.setOnAction(e -> window.setScene(HomeScene));
-
-        // This is the start of home scene
-        // Setting Scene 2
-        HomeScene = new Scene(pane, 320, 420);
-
-        // Select text on the Home Page
-        Text select = new Text("Select An Option Below");
-        select.setTranslateY(-75);
-        select.setScaleX(2);
-        select.setScaleY(2);
-
-        // Register property button
-        RegisterProp = new Button();
-        RegisterProp.setText("Register a Property");
-        RegisterProp.setTranslateX(75);
-        RegisterProp.setOnAction(this);
-
-        // View Property button
-        ViewProp = new Button();
-        ViewProp.setText("View a Property");
-        ViewProp.setTranslateX(-50);
-
-        // Logout Button to go back to the first scene
-        Logout = new Button();
-        Logout.setText("Logout");
-        Logout.setTranslateX(280 / 2);
-        Logout.setTranslateY(-380 / 2);
+        btCreate.setOnAction(e -> window.setScene(createScene));
 
         loginPane.getChildren().add(loginHeading);
         loginPane.getChildren().add(btLogin);
@@ -108,19 +76,14 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         loginPane.getChildren().add(nameInput);
         loginPane.getChildren().add(passLabel);
         loginPane.getChildren().add(passInput);
-        pane.getChildren().add(Logout);
-        pane.getChildren().add(RegisterProp);
-        pane.getChildren().add(ViewProp);
-        pane.getChildren().add(select);
-        window.setScene(HomeScene);
+        window.setScene(loginScene);
         window.show();
+
     }
 
-    @Override
-    public void handle(ActionEvent event) {
-        if (event.getSource() == RegisterProp) {
-            System.out.println("Hallo");
-        }
+    public static void main(String[] args) {
+        launch(args);
+
     }
 }
 

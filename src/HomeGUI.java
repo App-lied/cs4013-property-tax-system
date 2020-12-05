@@ -52,7 +52,10 @@ public class HomeGUI extends Application implements EventHandler<ActionEvent> {
         // Logout Button to go back to the first scene
         Logout = new Button();
         Logout.setText("Logout");
+        Logout.setTranslateX(280 / 2);
+        Logout.setTranslateY(-380 / 2);
 
+        pane.getChildren().add(Logout);
         pane.getChildren().add(RegisterProp);
         pane.getChildren().add(ViewProp);
         pane.getChildren().add(select);
@@ -62,7 +65,6 @@ public class HomeGUI extends Application implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-        // TODO Auto-generated method stub
         if (event.getSource() == RegisterProp) {
             System.out.println("Hallo");
         }
