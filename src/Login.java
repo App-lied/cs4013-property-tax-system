@@ -1,18 +1,26 @@
-//a class to handle the terminal implementation of the login screen.
-
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * A class to handle the terminal implementation of the system's login screen.
+ */
 public class Login {
     
     private static File source = new File("src/lib/users/userlogin.csv");
     private Scanner in;
 
+    /**
+     * The default constructor.
+     */
     public Login(){
         in = new Scanner(System.in);
     }
 
+    /**
+     * The entry method for the flow of the class.
+     * @throws IOException
+     */
     public void run() throws IOException {
         System.out.println("Press 'L' to login. Press 'U' to create a new account. Press 'Q' to exit.");
 
@@ -34,6 +42,10 @@ public class Login {
     }
 
 
+    /**
+     * A private method to handle the funcionality to login as a registered user.
+     * @throws IOException
+     */
     private void login() throws IOException{
         String enteredName, enteredPassword;
         System.out.print("Enter Username: ");
@@ -67,7 +79,10 @@ public class Login {
         }
     }
 
-
+    /**
+     * A private method to register a new user to the system, writing it to file.
+     * @throws IOException
+     */
     private void createNewUser() throws IOException{
         String enteredName, enteredPassword;
         System.out.print("Enter New Username: ");

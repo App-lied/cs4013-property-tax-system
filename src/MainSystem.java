@@ -1,18 +1,27 @@
-//a class to handle the terminal implementation of the main user interface
-
 import java.util.Scanner;
 //import java.io.File;
 import java.io.IOException;
 
+/**
+ * A class to handle the main interface of the system's terminal implementation.
+ * It is created once in Login.java
+ */
 public class MainSystem {
     
-    //private static File source = new File("src/lib/properties/property_info.csv");
     private Scanner in;
 
+    /**
+     * The default constructor.
+     */
     public MainSystem(){
         in = new Scanner(System.in);
     }
 
+    /**
+     * The entry method for the flow of the class.
+     * @param user The currently logged-in user.
+     * @throws IOException
+     */
     public void run(User user) throws IOException{
         if(user instanceof Admin){
             runAdmin(user);
@@ -21,9 +30,19 @@ public class MainSystem {
         }
     }
 
+    /**
+     * The method to display the admin side of the program.
+     * @param user The currently logged-in user.
+     * @throws IOException
+     */
     private void runAdmin(User user) throws IOException{
     }
 
+    /**
+     * The method to display the standard user (property owner's) side of the program.
+     * @param user The currently logged-in user.
+     * @throws IOException
+     */
     private void runPropertyOwner(User user) throws IOException{
 
         System.out.println("Press 'V' to view your properties. Press 'P' to register a new property. Press 'Q' to exit.");
@@ -46,7 +65,12 @@ public class MainSystem {
         System.exit(0);
     }
 
-
+    /**
+     * A private method to display the currently logged in property owner's list of properties.
+     * @param user The currently logged-in user.
+     * @return The selected property as a Property object. Null if the user exits.
+     * @throws IOException
+     */
     private Object displayProperties(User user) throws IOException{
         for(int i = 0; i < ((PropertyOwner)user).getPropertyList().size(); i++){
             System.out.println((i + 1) + ") " + ((PropertyOwner)user).getPropertyList().get(i).toString());
@@ -69,7 +93,11 @@ public class MainSystem {
         }
     }
 
-
+    /**
+     * A method to register a new property, writing it to file.
+     * @param user The currently logged-in user.
+     * @throws IOException
+     */
     private void registerProperty(User user) throws IOException{
         String[] answers = new String[6];
 
