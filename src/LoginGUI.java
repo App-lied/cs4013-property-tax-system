@@ -98,7 +98,7 @@ class LoginHandler implements EventHandler<ActionEvent> {
     }
 
     private void login() throws IOException {
-        String combined = LoginGUI.nameInput.getText() + "," + LoginGUI.passInput.getText();
+        String combined = LoginGUI.nameInput.getText() + "," + LoginGUI.passInput.getText() + ",";
         
         if(searchForString(combined) && !(combined.equals("username,password"))){
             System.out.println("\nLogin Successful");            
