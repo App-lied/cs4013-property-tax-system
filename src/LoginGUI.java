@@ -1,3 +1,8 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,73 +16,106 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 
-public class LoginGUI extends Application {
-    @Override    
-    public void start(Stage primaryStage){        
+public class LoginGUI extends Application{
+    static PasswordField passInput;
+    static TextField nameInput;
+    static File source = new File("src/lib/users/userlogin.csv");
+
+    @Override
+    public void start(Stage primaryStage) {
         GridPane pane = new GridPane();
         pane.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(pane, 320, 420);    
+        Scene scene = new Scene(pane, 320, 420);
 
-        //Login heading
+        // Login heading
         Text loginHeading = new Text("Login");
         loginHeading.setTranslateX(50);
         loginHeading.setTranslateY(-180);
         loginHeading.setScaleX(2);
         loginHeading.setScaleY(2);
 
-        //Name label
+        // Name label
         Label nameLabel = new Label("Username:");
         nameLabel.setTranslateX(-scene.getWidth() / 2 + 100);
 
-        //Name text field
-        TextField nameInput = new TextField();
+        // Name text field
+        nameInput = new TextField();
         nameInput.setTranslateX(50);
 
-        //Password label
+        // Password label
         Label passLabel = new Label("Password:");
         passLabel.setTranslateX(-scene.getWidth() / 2 + 100);
         passLabel.setTranslateY(30);
-        
 
-        //Name password field
-        PasswordField passInput = new PasswordField();
+        // Name password field
+        passInput = new PasswordField();
         passInput.setTranslateX(50);
         passInput.setTranslateY(30);
 
-        //Enter button
+        // Enter button
         Button btLogin = new Button("Login");
-        btLogin.setTranslateX(150);        
+        btLogin.setTranslateX(150);
         btLogin.setTranslateY(scene.getHeight() - 250);
         LoginHandler login = new LoginHandler();
         btLogin.setOnAction(login);
 
-        //Create new account
+        // Create new account
         Button btCreate = new Button("Create a new account");
-        btCreate.setTranslateX(-65);        
+        btCreate.setTranslateX(-65);
         btCreate.setTranslateY(scene.getHeight() - 250);
-        
-        
+
         pane.getChildren().add(loginHeading);
         pane.getChildren().add(btLogin);
         pane.getChildren().add(btCreate);
         pane.getChildren().add(nameLabel);
         pane.getChildren().add(nameInput);
         pane.getChildren().add(passLabel);
-        pane.getChildren().add(passInput);               
+        pane.getChildren().add(passInput);
         primaryStage.setScene(scene);
-        primaryStage.show();        
+        primaryStage.show();
+
     }
 
-    
     public static void main(String[] args) {
         launch(args);
-        
+
     }
 }
 
-class LoginHandler implements EventHandler<ActionEvent>{
+class LoginHandler implements EventHandler<ActionEvent> {
     @Override
-    public void handle(ActionEvent e){
-        System.out.println("You've logged in");
+    public void handle(ActionEvent e) {
+        try {
+            login();
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }        
+    }
+
+    private void login() throws IOException {
+        String combined = LoginGUI.nameInput.getText() + "," + LoginGUI.passInput.getText();
+        
+        if(searchForString(combined) && !(combined.equals("username,password"))){
+            System.out.println("\nLogin Successful");            
+        }
+        else{
+            System.out.println("\nLogin Failed. Invalid Username or Password");            
+        }
+    }
+
+    private static boolean searchForString(String s) throws FileNotFoundException{
+        final Scanner scanner = new Scanner(LoginGUI.source);
+
+        while (scanner.hasNextLine()){
+            final String lineFromFile = scanner.nextLine();
+            if(lineFromFile.contains(s)){
+                scanner.close();
+                return true;
+            }
+        }
+
+        scanner.close();
+        return false;
     }
 }
