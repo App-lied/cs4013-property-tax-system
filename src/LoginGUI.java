@@ -20,12 +20,17 @@ public class LoginGUI extends Application{
     static PasswordField passInput;
     static TextField nameInput;
     static File source = new File("src/lib/users/userlogin.csv");
+    Stage window;
+    Scene loginScene, createScene;
 
     @Override
-    public void start(Stage primaryStage) {
-        GridPane pane = new GridPane();
-        pane.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(pane, 320, 420);
+    public void start(Stage primaryStage) {        
+        window = primaryStage;
+        GridPane loginPane = new GridPane();
+        GridPane createPane = new GridPane();
+        createScene = new Scene(createPane, 320, 420);
+        loginPane.setAlignment(Pos.CENTER);
+        loginScene = new Scene(loginPane, 320, 420);
 
         // Login heading
         Text loginHeading = new Text("Login");
@@ -36,7 +41,7 @@ public class LoginGUI extends Application{
 
         // Name label
         Label nameLabel = new Label("Username:");
-        nameLabel.setTranslateX(-scene.getWidth() / 2 + 100);
+        nameLabel.setTranslateX(-loginScene.getWidth() / 2 + 100);
 
         // Name text field
         nameInput = new TextField();
@@ -44,7 +49,7 @@ public class LoginGUI extends Application{
 
         // Password label
         Label passLabel = new Label("Password:");
-        passLabel.setTranslateX(-scene.getWidth() / 2 + 100);
+        passLabel.setTranslateX(-loginScene.getWidth() / 2 + 100);
         passLabel.setTranslateY(30);
 
         // Name password field
@@ -55,27 +60,27 @@ public class LoginGUI extends Application{
         // Enter button
         Button btLogin = new Button("Login");
         btLogin.setTranslateX(150);
-        btLogin.setTranslateY(scene.getHeight() - 250);
+        btLogin.setTranslateY(loginScene.getHeight() - 250);
         LoginHandler login = new LoginHandler();
         btLogin.setOnAction(login);
 
         // Create new account
         Button btCreate = new Button("Create a new account");
         btCreate.setTranslateX(-65);
-        btCreate.setTranslateY(scene.getHeight() - 250);
+        btCreate.setTranslateY(loginScene.getHeight() - 250);
+        btCreate.setOnAction(e -> window.setScene(createScene));
 
-        pane.getChildren().add(loginHeading);
-        pane.getChildren().add(btLogin);
-        pane.getChildren().add(btCreate);
-        pane.getChildren().add(nameLabel);
-        pane.getChildren().add(nameInput);
-        pane.getChildren().add(passLabel);
-        pane.getChildren().add(passInput);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        loginPane.getChildren().add(loginHeading);
+        loginPane.getChildren().add(btLogin);
+        loginPane.getChildren().add(btCreate);
+        loginPane.getChildren().add(nameLabel);
+        loginPane.getChildren().add(nameInput);
+        loginPane.getChildren().add(passLabel);
+        loginPane.getChildren().add(passInput);
+        window.setScene(loginScene);
+        window.show();
 
     }
-
     public static void main(String[] args) {
         launch(args);
 
@@ -87,8 +92,7 @@ class LoginHandler implements EventHandler<ActionEvent> {
     public void handle(ActionEvent e) {
         try {
             login();
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
+        } catch (IOException e1) {            
             e1.printStackTrace();
         }        
     }
@@ -119,3 +123,5 @@ class LoginHandler implements EventHandler<ActionEvent> {
         return false;
     }
 }
+
+
