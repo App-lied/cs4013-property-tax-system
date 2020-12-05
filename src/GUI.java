@@ -20,8 +20,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     Scene loginScene, HomeScene;
     Button RegisterProp, ViewProp, Logout, btLogin, btCreate;
     GridPane createPane, loginPane, pane;
-    static PasswordField passInput;
-    static TextField nameInput;
+    private PasswordField passInput;
+    private TextField nameInput;
     static File source = new File("src/lib/users/userlogin.csv");
 
     @Override
@@ -63,9 +63,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         // Enter button
         btLogin = new Button("Login");
         btLogin.setTranslateX(150);
-        btLogin.setTranslateY(loginScene.getHeight() - 250);
-        LoginHandler login = new LoginHandler();
-        btLogin.setOnAction(login);
+        btLogin.setTranslateY(loginScene.getHeight() - 250);        
+        btLogin.setOnAction(this);
 
         // Create new account
         btCreate = new Button("Create a new account");
@@ -119,7 +118,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         if (event.getSource() == RegisterProp) {
             System.out.println("Hallo");
-        } else if (event.getSource() == btLogin) {
+        }
+        if (event.getSource() == btLogin) {
             try {
                 login();
             } catch (IOException e1) {
@@ -129,9 +129,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     }
 
     private void login() throws IOException {
-        String combined = LoginGUI.nameInput.getText() + "," + LoginGUI.passInput.getText();
+        String combined = nameInput.getText() + "," + passInput.getText();
 
-        if (searchForString(combined) && !(combined.equals("username,password"))) {
+        if (searchForString(combined) && !(combined.equals("username,password,"))) {
             System.out.println("\nLogin Successful");
         } else {
             System.out.println("\nLogin Failed. Invalid Username or Password");
