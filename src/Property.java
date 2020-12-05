@@ -64,7 +64,7 @@ public class Property {
     public String toString() {
         return getOwner() + "\n" + getAddress() + "\n" + postcode
                 + "\nEstimated Market Value: €" + getestMarketValue()
-                + "\nLocation Category: " + getPropertyLocation();
+                + "\nLocation Category: " + getPropertyLocation() + "\n";
     }
 
     public void writeToFile(String username){

@@ -37,15 +37,38 @@ public class MainSystem {
                 System.out.println("System exiting.");
                 running = false;
             } else if(choice.equals("v")){
-                displayProperties(user);
+                Object o = displayProperties(user);
+                if(o == null){
+                    runPropertyOwner(user);
+                }
             }
         }
         System.exit(0);
     }
 
-    private void displayProperties(User user) throws IOException{
-        
+
+    private Object displayProperties(User user) throws IOException{
+        for(int i = 0; i < ((PropertyOwner)user).getPropertyList().size(); i++){
+            System.out.println((i + 1) + ") " + ((PropertyOwner)user).getPropertyList().get(i).toString());
+            System.out.println();
+        }
+
+        System.out.println("Enter the number of the property to view payments. Press 'Q' to exit.");
+        String input = in.nextLine();
+
+        if(input.toLowerCase().equals("q")){
+            return null;
+        }
+
+        int c = Integer.parseInt(input) - 1;
+
+        if(c >= 0 && c < ((PropertyOwner)user).getPropertyList().size()){
+            return ((PropertyOwner)user).getPropertyList().get(c);
+        } else {
+            return null;
+        }
     }
+
 
     private void registerProperty(User user) throws IOException{
         String[] answers = new String[6];

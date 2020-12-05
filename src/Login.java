@@ -33,6 +33,7 @@ public class Login {
 
     }
 
+
     private void login() throws IOException{
         String enteredName, enteredPassword;
         System.out.print("Enter Username: ");
@@ -41,10 +42,10 @@ public class Login {
         enteredPassword = in.nextLine();
 
         //combine both the username and password so you can't login to a different account if it uses the same password
-        String combined = enteredName + "," + enteredPassword;
+        String combined = enteredName + "," + enteredPassword + ",";
     
         //check if both the combined string exists, and check that it does not equal the first row in the csv that lays out the columns
-        if(Utils.searchForString(source, combined) && !(combined.equals("username,password"))){
+        if(Utils.searchForString(source, combined) && !(combined.equals("username,password,"))){
             System.out.println("\nLogin Successful");
 
             //declare a new User object, then cast it depending on if it's noted as an admin or not in the file
@@ -55,13 +56,17 @@ public class Login {
             } else {
                 loggedIn = new PropertyOwner(enteredName, enteredPassword);
             }
+
+            //create a new main system interface and login with the user
             MainSystem next = new MainSystem();
             next.run(loggedIn);
+       
         } else{
             System.out.println("\nLogin Failed. Invalid Username or Password");
             run();
         }
     }
+
 
     private void createNewUser() throws IOException{
         String enteredName, enteredPassword;
