@@ -17,11 +17,11 @@ import javafx.geometry.Pos;
 
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
-    Scene loginScene, HomeScene;
+    Scene loginScene, HomeScene, createScene;
     Button RegisterProp, ViewProp, Logout, btLogin, btCreate;
     GridPane createPane, loginPane, pane;
-    static PasswordField passInput;
-    static TextField nameInput;
+    private PasswordField passInput;
+    private TextField nameInput;
     static File source = new File("src/lib/users/userlogin.csv");
 
     @Override
@@ -31,6 +31,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         pane = new GridPane();
         loginPane = new GridPane();
         createPane = new GridPane();
+        createScene = new Scene(createPane, 320, 420);
         pane.setAlignment(Pos.CENTER);
 
         loginPane.setAlignment(Pos.CENTER);
@@ -63,15 +64,14 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         // Enter button
         btLogin = new Button("Login");
         btLogin.setTranslateX(150);
-        btLogin.setTranslateY(loginScene.getHeight() - 250);
-        LoginHandler login = new LoginHandler();
-        btLogin.setOnAction(login);
+        btLogin.setTranslateY(loginScene.getHeight() - 250);        
+        btLogin.setOnAction(this);
 
         // Create new account
         btCreate = new Button("Create a new account");
         btCreate.setTranslateX(-65);
         btCreate.setTranslateY(loginScene.getHeight() - 250);
-        btCreate.setOnAction(e -> window.setScene(HomeScene));
+        btCreate.setOnAction(e -> window.setScene(createScene));
 
         // This is the start of home scene
         // Setting Scene 2
@@ -119,7 +119,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         if (event.getSource() == RegisterProp) {
             System.out.println("Hallo");
-        } else if (event.getSource() == btLogin) {
+        }
+        if (event.getSource() == btLogin) {
             try {
                 login();
             } catch (IOException e1) {
@@ -129,10 +130,10 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     }
 
     private void login() throws IOException {
-        String combined = LoginGUI.nameInput.getText() + "," + LoginGUI.passInput.getText();
+        String combined = nameInput.getText() + "," + passInput.getText();
 
-        if (searchForString(combined) && !(combined.equals("username,password"))) {
-            System.out.println("\nLogin Successful");
+        if (searchForString(combined) && !(combined.equals("username,password,"))) {
+            window.setScene(HomeScene);
         } else {
             System.out.println("\nLogin Failed. Invalid Username or Password");
         }
