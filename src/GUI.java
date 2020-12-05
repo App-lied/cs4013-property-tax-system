@@ -17,7 +17,7 @@ import javafx.geometry.Pos;
 
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
-    Scene loginScene, HomeScene;
+    Scene loginScene, HomeScene, createScene;
     Button RegisterProp, ViewProp, Logout, btLogin, btCreate;
     GridPane createPane, loginPane, pane;
     private PasswordField passInput;
@@ -31,6 +31,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         pane = new GridPane();
         loginPane = new GridPane();
         createPane = new GridPane();
+        createScene = new Scene(createPane, 320, 420);
         pane.setAlignment(Pos.CENTER);
 
         loginPane.setAlignment(Pos.CENTER);
@@ -70,7 +71,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         btCreate = new Button("Create a new account");
         btCreate.setTranslateX(-65);
         btCreate.setTranslateY(loginScene.getHeight() - 250);
-        btCreate.setOnAction(e -> window.setScene(HomeScene));
+        btCreate.setOnAction(e -> window.setScene(createScene));
 
         // This is the start of home scene
         // Setting Scene 2
@@ -132,7 +133,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         String combined = nameInput.getText() + "," + passInput.getText();
 
         if (searchForString(combined) && !(combined.equals("username,password,"))) {
-            System.out.println("\nLogin Successful");
+            window.setScene(HomeScene);
         } else {
             System.out.println("\nLogin Failed. Invalid Username or Password");
         }
