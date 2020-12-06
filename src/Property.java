@@ -5,6 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * A class to represent and store data on a property in the system.
+ */
 public class Property {
 
     private String owner;
@@ -16,9 +19,21 @@ public class Property {
     private boolean principalResidence;
     private ArrayList<Payment> paymentList;
 
+    /**
+     * The default constructor.
+     */
     public Property() {
     }
 
+    /**
+     * 
+     * @param owner The owner of the property.
+     * @param address The address of the property.
+     * @param postcode The postcode of the property.
+     * @param estMarketValue The estimated market value of the property.
+     * @param category The category, 0-4, that determines the location of the property (Countryside, City, etc.)
+     * @param principalResidence Whether or not this is the owner's principal private residence.
+     */
     public Property(String owner, String address, String postcode, double estMarketValue, int category, boolean principalResidence) {
         this.owner = owner;
         this.address = address;
@@ -29,26 +44,50 @@ public class Property {
         paymentList = findPayments();
     }
 
+    /**
+     * 
+     * @return The owner of the property.
+     */
     public String getOwner() {
         return owner;
     }
 
+    /**
+     * 
+     * @return The address of the property.
+     */
     public String getAddress() {
         return address;
     }
 
+    /**
+     * 
+     * @return The postcode of the property.
+     */
     public String getPostcode() {
         return postcode;
     }
 
+    /**
+     * 
+     * @return The estimated market value of the property.
+     */
     public double getestMarketValue() {
         return estMarketValue;
     }
 
+    /**
+     * 
+     * @return The location of the property.
+     */
     public String getPropertyLocation() {        
         return locations[category];
     }
 
+    /**
+     * 
+     * @return The number representing the property's location category.
+     */
     public int getLocationCategory() {
         return category;
     }
@@ -57,16 +96,28 @@ public class Property {
         return principalResidence;
     }
 
+    /**
+     * 
+     * @return The list of tax payments associated with the property.
+     */
     public ArrayList<Payment> getPaymentList() {
         return paymentList;
     }
 
+    /**
+     * 
+     * @return A string representation of the property.
+     */
     public String toString() {
         return getOwner() + "\n" + getAddress() + "\n" + postcode
                 + "\nEstimated Market Value: €" + getestMarketValue()
                 + "\nLocation Category: " + getPropertyLocation() + "\n";
     }
 
+    /**
+     * Writes the property's data to the property_info.csv file
+     * @param username The username of the owner of the property.
+     */
     public void writeToFile(String username){
         String filename = "src/lib/properties/property_info.csv";
 
@@ -100,7 +151,7 @@ public class Property {
             sb.append(",");
             sb.append(this.getestMarketValue());
             sb.append(",");
-            sb.append(this.getLocationCategory());
+            sb.append(this.category);
             sb.append(",");
             sb.append(principalResidence == true ? "yes" : "no");
             sb.append(",");
@@ -115,7 +166,10 @@ public class Property {
         }
     }
 
-
+    /**
+     * A private method called on creation of the object to find its associated tax payment history from file.
+     * @return The list of payments associated with the property.
+     */
     private ArrayList<Payment> findPayments(){
         String filename = "src/lib/properties/payment_info.csv";
         ArrayList<Payment> result = new ArrayList<Payment>();
