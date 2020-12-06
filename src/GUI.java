@@ -17,25 +17,36 @@ import javafx.geometry.Pos;
 
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
-    Scene loginScene, HomeScene, createScene;
-    Button RegisterProp, ViewProp, Logout, btLogin, btCreate;
-    GridPane createPane, loginPane, pane;
+    Scene loginScene, HomeScene, CreateScene, RegisterScene;
+    Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm;
+    GridPane createPane, loginPane, homePane, registerPane;
     private PasswordField passInput;
-    private TextField nameInput;
+    private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, LocationCatIn, PrincipalResIn;
     static File source = new File("src/lib/users/userlogin.csv");
 
     @Override
     public void start(Stage primaryStage) {
+        // setting the stage
         window = primaryStage;
         window.setTitle("Home");
-        pane = new GridPane();
+
+        // Setting all the panes
+        homePane = new GridPane();
         loginPane = new GridPane();
         createPane = new GridPane();
-        createScene = new Scene(createPane, 320, 420);
-        pane.setAlignment(Pos.CENTER);
+        registerPane = new GridPane();
 
+        // Allign
         loginPane.setAlignment(Pos.CENTER);
+        homePane.setAlignment(Pos.CENTER);
+        createPane.setAlignment(Pos.CENTER);
+        registerPane.setAlignment(Pos.CENTER);
+
+        CreateScene = new Scene(createPane, 320, 420);
         loginScene = new Scene(loginPane, 320, 420);
+        HomeScene = new Scene(homePane, 320, 420);
+        RegisterScene = new Scene(registerPane, 320, 420);
+
         // Login heading
         Text loginHeading = new Text("Login");
         loginHeading.setTranslateX(50);
@@ -64,18 +75,17 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         // Enter button
         btLogin = new Button("Login");
         btLogin.setTranslateX(150);
-        btLogin.setTranslateY(loginScene.getHeight() - 250);        
+        btLogin.setTranslateY(loginScene.getHeight() - 250);
         btLogin.setOnAction(this);
 
         // Create new account
         btCreate = new Button("Create a new account");
         btCreate.setTranslateX(-65);
         btCreate.setTranslateY(loginScene.getHeight() - 250);
-        btCreate.setOnAction(e -> window.setScene(createScene));
+        btCreate.setOnAction(e -> window.setScene(CreateScene));
 
         // This is the start of home scene
         // Setting Scene 2
-        HomeScene = new Scene(pane, 320, 420);
 
         // Select text on the Home Page
         Text select = new Text("Select An Option Below");
@@ -99,6 +109,83 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         Logout.setText("Logout");
         Logout.setTranslateX(280 / 2);
         Logout.setTranslateY(-380 / 2);
+        Logout.setOnAction(this);
+
+        // Label of Register Owner
+        Text Register = new Text("Register a property");
+        Register.setTranslateX(loginScene.getWidth() / 2 - 125);
+        Register.setTranslateY(-125);
+        Register.setScaleX(2);
+        Register.setScaleY(2);
+
+        Label Owner = new Label("Owner:");
+        Owner.setTranslateX(-RegisterScene.getWidth() / 2 + 100);
+        Owner.setTranslateY(-30);
+
+        Label Address = new Label("Address:");
+        Address.setTranslateX(-RegisterScene.getWidth() / 2 + 100);
+        Address.setTranslateY(0);
+
+        Label Postcode = new Label("Postcode:");
+        Postcode.setTranslateX(-RegisterScene.getWidth() / 2 + 100);
+        Postcode.setTranslateY(30);
+
+        Label Value = new Label("Market Value:");
+        Value.setTranslateX(-RegisterScene.getWidth() / 2 + 100);
+        Value.setTranslateY(60);
+
+        Label LocationCat = new Label("Location Catagory:");
+        LocationCat.setTranslateX(-RegisterScene.getWidth() / 2 + 100);
+        LocationCat.setTranslateY(90);
+
+        Label PrincipalRes = new Label("Principal Private Residence?:");
+        PrincipalRes.setTranslateX(-RegisterScene.getWidth() / 2 + 100);
+        PrincipalRes.setTranslateY(120);
+
+        OwnerIn = new TextField();
+        OwnerIn.setTranslateX(50);
+        OwnerIn.setTranslateY(-30);
+
+        AddressIn = new TextField();
+        AddressIn.setTranslateX(50);
+        AddressIn.setTranslateY(0);
+
+        PostcodeIn = new TextField();
+        PostcodeIn.setTranslateX(50);
+        PostcodeIn.setTranslateY(30);
+
+        MarketValIn = new TextField();
+        MarketValIn.setTranslateX(50);
+        MarketValIn.setTranslateY(60);
+
+        LocationCatIn = new TextField();
+        LocationCatIn.setTranslateX(50);
+        LocationCatIn.setTranslateY(90);
+
+        PrincipalResIn = new TextField();
+        PrincipalResIn.setTranslateX(50);
+        PrincipalResIn.setTranslateY(120);
+
+        Confirm = new Button();
+        Confirm.setText("Confirm");
+        Confirm.setTranslateX(280 / 2);
+        Confirm.setTranslateY(-380 / 2);
+
+        registerPane.getChildren().add(Owner);
+        registerPane.getChildren().add(Address);
+        registerPane.getChildren().add(Postcode);
+        registerPane.getChildren().add(Value);
+        registerPane.getChildren().add(LocationCat);
+        registerPane.getChildren().add(PrincipalRes);
+        // registerPane.getChildren().add(Confirm);
+        registerPane.getChildren().add(Register);
+        registerPane.getChildren().add(OwnerIn);
+        registerPane.getChildren().add(AddressIn);
+        registerPane.getChildren().add(PostcodeIn);
+        registerPane.getChildren().add(LocationCatIn);
+        registerPane.getChildren().add(MarketValIn);
+        registerPane.getChildren().add(PrincipalResIn);
+        registerPane.getChildren().add(Logout);
 
         loginPane.getChildren().add(loginHeading);
         loginPane.getChildren().add(btLogin);
@@ -107,18 +194,21 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         loginPane.getChildren().add(nameInput);
         loginPane.getChildren().add(passLabel);
         loginPane.getChildren().add(passInput);
-        pane.getChildren().add(Logout);
-        pane.getChildren().add(RegisterProp);
-        pane.getChildren().add(ViewProp);
-        pane.getChildren().add(select);
+        homePane.getChildren().add(Logout);
+        homePane.getChildren().add(RegisterProp);
+        homePane.getChildren().add(ViewProp);
+        homePane.getChildren().add(select);
         window.setScene(loginScene);
         window.show();
     }
 
     @Override
     public void handle(ActionEvent event) {
+        if (event.getSource() == Logout) {
+            window.setScene(loginScene);
+        }
         if (event.getSource() == RegisterProp) {
-            System.out.println("Hallo");
+            window.setScene(RegisterScene);
         }
         if (event.getSource() == btLogin) {
             try {
