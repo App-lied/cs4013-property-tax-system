@@ -194,7 +194,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         // Property List
 
-        viewpropPane.getChildren().add();
+        // viewpropPane.getChildren().add();
 
         confirmPane.getChildren().add(BackMain);
         confirmPane.getChildren().add(Registered);
