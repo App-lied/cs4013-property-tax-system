@@ -18,10 +18,11 @@ import javafx.geometry.Pos;
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
     Scene loginScene, HomeScene, CreateScene, RegisterScene, ConfirmScene, ViewPropScene;
-    Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain;
+    Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew;
     GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropPane;
-    private PasswordField passInput;
-    private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, LocationCatIn, PrincipalResIn;
+    private PasswordField passInput, newpassInput;
+    private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, LocationCatIn, PrincipalResIn,
+            NewUsername;
     static File source = new File("src/lib/users/userlogin.csv");
 
     @Override
@@ -120,7 +121,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         // Label of Register Owner
         Text Register = new Text("Register a property");
-        Register.setTranslateX(loginScene.getWidth() / 2 - 125);
+        Register.setTranslateX(RegisterScene.getWidth() / 2 - 125);
         Register.setTranslateY(-125);
         Register.setScaleX(2);
         Register.setScaleY(2);
@@ -192,9 +193,50 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         Registered.setScaleX(2);
         Registered.setScaleY(2);
 
-        // Property List
+        // Create New Account
+        // The users new username
+        Label NewUsernameLabel = new Label("Username:");
+        NewUsernameLabel.setTranslateX(-RegisterScene.getWidth() / 2 + 100);
+
+        NewUsername = new TextField();
+        NewUsername.setTranslateX(50);
+
+        // The users new password
+        Label newpassLabel = new Label("Password:");
+        newpassLabel.setTranslateX(-loginScene.getWidth() / 2 + 100);
+        newpassLabel.setTranslateY(30);
+
+        newpassInput = new PasswordField();
+        newpassInput.setTranslateX(50);
+        newpassInput.setTranslateY(30);
+
+        CreateNew = new Button();
+        CreateNew.setText("Create a new Account");
+        CreateNew.setTranslateX(0);
+        CreateNew.setTranslateY(130);
+        CreateNew.setOnAction(this);
+
+        Text CreateNewText = new Text("Create a new Account");
+        CreateNewText.setTranslateX(25);
+        CreateNewText.setTranslateY(-150);
+        CreateNewText.setScaleX(2);
+        CreateNewText.setScaleY(2);
+
+        Text enterFields = new Text("Enter the fields below");
+        enterFields.setTranslateX(20);
+        enterFields.setTranslateY(-100);
+        enterFields.setScaleX(1.5);
+        enterFields.setScaleY(1.5);
 
         // viewpropPane.getChildren().add();
+
+        createPane.getChildren().add(NewUsernameLabel);
+        createPane.getChildren().add(NewUsername);
+        createPane.getChildren().add(newpassLabel);
+        createPane.getChildren().add(newpassInput);
+        createPane.getChildren().add(CreateNew);
+        createPane.getChildren().add(CreateNewText);
+        createPane.getChildren().add(enterFields);
 
         confirmPane.getChildren().add(BackMain);
         confirmPane.getChildren().add(Registered);
@@ -247,6 +289,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         if (event.getSource() == ViewProp) {
             window.setScene(ViewPropScene);
         }
+        if (event.getSource() == CreateNew) {
+            window.setScene(loginScene);
+        }
         if (event.getSource() == btLogin) {
             try {
                 login();
@@ -257,8 +302,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     }
 
     private void login() throws IOException {
-        String combined = nameInput.getText() + "," + passInput.getText() + ",";
-        if (searchForString(combined) && !(combined.equals("username,password,") || combined.equals(","))) {
+        String combined = nameInput.getText() + "," + passInput.getText();
+
+        if (searchForString(combined) && !(combined.equals("username,password,"))) {
             window.setScene(HomeScene);
         } else {
             System.out.println("\nLogin Failed. Invalid Username or Password");
