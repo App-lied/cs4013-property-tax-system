@@ -57,9 +57,10 @@ public class MainSystem {
                 running = false;
             } else if(choice.equals("v")){
                 Object o = displayProperties(user);
-                if(o == null){
-                    runPropertyOwner(user);
+                if(o != null){
+                    displayPayments((Property) o);
                 }
+                runPropertyOwner(user);
             }
         }
         System.exit(0);
@@ -91,6 +92,35 @@ public class MainSystem {
         } else {
             return null;
         }
+    }
+
+    private void displayPayments(Property p) throws IOException{
+        for(int i = 0; i < p.getPaymentList().size(); i++){
+            System.out.println((i + 1) + ") " + (p.getPaymentList().get(i).toString()));
+        }
+
+        System.out.println("Enter the number of the payment to make payment. Press 'Q' to exit.");
+        String input = in.nextLine();
+
+        if(!input.toLowerCase().equals("q")){
+            int c = Integer.parseInt(input) - 1;
+            if(c >= 0 && c < p.getPaymentList().size()){
+                if(p.getPaymentList().get(c).isPaid()){
+                    System.out.println("Payment has already been made.");
+                } else {
+                    int y = p.getPaymentList().get(c).getYear();
+                    double a = p.getPaymentList().get(c).getAmount();
+                    Payment temp = new Payment(y, a, true);
+
+                    p.getPaymentList().get(c).removePayment(p.getPostcode());
+                    p.getPaymentList().remove(p.getPaymentList().get(c));
+
+                    temp.writeToFile(p.getPostcode());
+                    p.getPaymentList().add(temp);
+                }
+            }
+        }
+
     }
 
     /**

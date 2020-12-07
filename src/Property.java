@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.Collections;
 
 /**
  * A class to represent and store data on a property in the system.
@@ -187,6 +188,7 @@ public class Property {
                 }
             }
 
+            Collections.sort(result);
             return result;
         } catch(IOException e){
             System.out.println(e.getMessage());
