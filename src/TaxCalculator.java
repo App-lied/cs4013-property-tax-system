@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**
+ * A class to calculate the tax due to be paid on a property.
+ */
 public class TaxCalculator {
     private static double fixedCharge;
     private static double[] locationCharges;
@@ -12,7 +15,10 @@ public class TaxCalculator {
     private int category; 
     private ArrayList<Payment> list;
 
-    // Default constructor
+    /**
+     * The default constructor.
+     * @param p The property to calculate the value for.
+     */
     public TaxCalculator(Property p) {
         fixedCharge = 100;
         locationCharges = new double[]{100, 80, 60, 50};
@@ -30,7 +36,10 @@ public class TaxCalculator {
 
     }   
 
-    // Returns tax payable using the private methods below
+    /**
+     * A method to return the tax due for a payment.
+     * @return The value of the tax due to be paid.
+     */
     public double getTaxPayable() {        
         double taxBeforePenalty = fixedCharge + getMarketValueTax() + getCategoryTax();
         if(residenceCharge == true){
@@ -39,7 +48,10 @@ public class TaxCalculator {
         return taxAfterPenalty(taxBeforePenalty);        
     }
 
-    // Calculates the market value tax by checking which
+    /**
+     * 
+     * @return The value of tax applied based on the property's est. market value.
+     */
     private double getMarketValueTax(){
         int i;
         double marketValueTax = 0;
@@ -52,6 +64,10 @@ public class TaxCalculator {
         return marketValueTax;
     }
 
+    /**
+     * 
+     * @return The value of tax applied based on the property's location.
+     */
     private double getCategoryTax(){
         return locationCharges[category];
     }
@@ -59,6 +75,12 @@ public class TaxCalculator {
     // Calculates the tax after penalty by looping through the list of payments and
     // counting the amount of years that the owner hasn't paid tax
     // This may be changed later if we think of a new penalty recording system
+    
+    /**
+     * Calculates the tax due if an overdue penalty has to be paid.
+     * @param tax The original value of the due tax.
+     * @return The tax after the overdue penalty is added.
+     */
     private double taxAfterPenalty(double tax){
         int i;
         int count = 0;

@@ -1,34 +1,51 @@
 import java.util.Scanner;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
+/**
+ * A class to handle the terminal implementation of the system's login screen.
+ */
 public class Login {
     
     private static File source = new File("src/lib/users/userlogin.csv");
     private Scanner in;
 
+    /**
+     * The default constructor.
+     */
     public Login(){
         in = new Scanner(System.in);
     }
 
+    /**
+     * The entry method for the flow of the class.
+     * @throws IOException
+     */
     public void run() throws IOException {
         System.out.println("Press 'L' to login. Press 'U' to create a new account. Press 'Q' to exit.");
 
-        String choice = in.nextLine().toLowerCase();
+        boolean running = true;
 
-        if(choice.equals("l")){
-            login();
-        } else if(choice.equals("u")){
-            createNewUser();
-        } else if(choice.equals("q")){
-            System.out.println("System exiting.");
-        } else{
-            run();
+        while(running){
+            String choice = in.nextLine().toLowerCase();
+            
+            if(choice.equals("l")){
+                login();
+            } else if(choice.equals("u")){
+                createNewUser();
+            } else if(choice.equals("q")){
+                System.out.println("System exiting.");
+                running = false;
+            } 
         }
 
     }
 
+
+    /**
+     * A private method to handle the funcionality to login as a registered user.
+     * @throws IOException
+     */
     private void login() throws IOException{
         String enteredName, enteredPassword;
         System.out.print("Enter Username: ");
@@ -36,17 +53,36 @@ public class Login {
         System.out.print("\nEnter Password: ");
         enteredPassword = in.nextLine();
 
-        String combined = enteredName + "," + enteredPassword;
+        //combine both the username and password so you can't login to a different account if it uses the same password
+        String combined = enteredName + "," + enteredPassword + ",";
     
-        if(searchForString(combined) && !(combined.equals("username,password"))){
+        //check if both the combined string exists, and check that it does not equal the first row in the csv that lays out the columns
+        if(Utils.searchForString(source, combined) && !(combined.equals("username,password,"))){
             System.out.println("\nLogin Successful");
-            in.close();
+
+            //declare a new User object, then cast it depending on if it's noted as an admin or not in the file
+            User loggedIn;
+
+            if(Utils.searchForString(source, combined + ",true")){
+                loggedIn = new Admin(enteredName, enteredPassword);
+            } else {
+                loggedIn = new PropertyOwner(enteredName, enteredPassword);
+            }
+
+            //create a new main system interface and login with the user
+            MainSystem next = new MainSystem();
+            next.run(loggedIn);
+       
         } else{
             System.out.println("\nLogin Failed. Invalid Username or Password");
             run();
         }
     }
 
+    /**
+     * A private method to register a new user to the system, writing it to file.
+     * @throws IOException
+     */
     private void createNewUser() throws IOException{
         String enteredName, enteredPassword;
         System.out.print("Enter New Username: ");
@@ -54,8 +90,10 @@ public class Login {
         System.out.print("\nEnter New Password: ");
         enteredPassword = in.nextLine();
 
-        if(!searchForString(enteredName)){
+        //check if the entered username already exists, system does not allow for duplicate usernames
+        if(!Utils.searchForString(source, enteredName)){
             PropertyOwner newPO = new PropertyOwner(enteredName, enteredPassword);
+            newPO.writeToFile();
             System.out.println("Account created successfully.");
             run();
 
@@ -64,20 +102,5 @@ public class Login {
             run();
         }
     }
-
-
-    private static boolean searchForString(String s) throws FileNotFoundException{
-        final Scanner scanner = new Scanner(source);
-
-        while (scanner.hasNextLine()){
-            final String lineFromFile = scanner.nextLine();
-            if(lineFromFile.contains(s)){
-                scanner.close();
-                return true;
-            }
-        }
-
-        scanner.close();
-        return false;
-    }
 }
+
