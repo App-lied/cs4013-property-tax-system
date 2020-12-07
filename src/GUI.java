@@ -130,9 +130,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     }
 
     private void login() throws IOException {
-        String combined = nameInput.getText() + "," + passInput.getText();
-
-        if (searchForString(combined) && !(combined.equals("username,password,"))) {
+        String combined = nameInput.getText() + "," + passInput.getText() + ",";
+        if (searchForString(combined) && !(combined.equals("username,password,") || combined.equals(","))) {
             window.setScene(HomeScene);
         } else {
             System.out.println("\nLogin Failed. Invalid Username or Password");
