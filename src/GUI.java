@@ -1,6 +1,9 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -11,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
@@ -18,8 +22,9 @@ import javafx.geometry.Pos;
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
     Scene loginScene, HomeScene, CreateScene, RegisterScene, ConfirmScene, ViewPropScene;
-    Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew;
+    Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew, BackToLogin;
     GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropPane;
+    Text createError, loginError;
     private PasswordField passInput, newpassInput;
     private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, LocationCatIn, PrincipalResIn,
             NewUsername;
@@ -47,8 +52,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         confirmPane.setAlignment(Pos.CENTER);
         viewpropPane.setAlignment(Pos.CENTER);
 
-        CreateScene = new Scene(createPane, 320, 420);
-        loginScene = new Scene(loginPane, 320, 420);
+        CreateScene = new Scene(createPane, 380, 420);
+        loginScene = new Scene(loginPane, 380, 420);
         HomeScene = new Scene(homePane, 320, 420);
         RegisterScene = new Scene(registerPane, 320, 420);
         ConfirmScene = new Scene(confirmPane, 320, 420);
@@ -56,14 +61,14 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         // Login heading
         Text loginHeading = new Text("Login");
-        loginHeading.setTranslateX(50);
+        loginHeading.setTranslateX(70);
         loginHeading.setTranslateY(-180);
         loginHeading.setScaleX(2);
         loginHeading.setScaleY(2);
 
         // Name label
         Label nameLabel = new Label("Username:");
-        nameLabel.setTranslateX(-loginScene.getWidth() / 2 + 100);
+        nameLabel.setTranslateX(-loginScene.getWidth() / 2 + 130);
 
         // Name text field
         nameInput = new TextField();
@@ -71,7 +76,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         // Password label
         Label passLabel = new Label("Password:");
-        passLabel.setTranslateX(-loginScene.getWidth() / 2 + 100);
+        passLabel.setTranslateX(-loginScene.getWidth() / 2 + 130);
         passLabel.setTranslateY(30);
 
         // Name password field
@@ -81,15 +86,22 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         // Enter button
         btLogin = new Button("Login");
-        btLogin.setTranslateX(150);
+        btLogin.setTranslateX(190);
         btLogin.setTranslateY(loginScene.getHeight() - 250);
         btLogin.setOnAction(this);
 
+        // Red error message
+        loginError = new Text("Please enter a username and password");
+        loginError.setVisible(false);
+        loginError.setFill(Color.RED);
+        loginError.setTranslateX(0);
+        loginError.setTranslateY(100);
+
         // Create new account
         btCreate = new Button("Create a new account");
-        btCreate.setTranslateX(-65);
+        btCreate.setTranslateX(-45);
         btCreate.setTranslateY(loginScene.getHeight() - 250);
-        btCreate.setOnAction(e -> window.setScene(CreateScene));
+        btCreate.setOnAction(this);
 
         // This is the start of home scene
         // Setting Scene 2
@@ -192,6 +204,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         Registered.setTranslateY(-150);
         Registered.setScaleX(2);
         Registered.setScaleY(2);
+        
 
         // Create New Account
         // The users new username
@@ -203,7 +216,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         // The users new password
         Label newpassLabel = new Label("Password:");
-        newpassLabel.setTranslateX(-loginScene.getWidth() / 2 + 100);
+        newpassLabel.setTranslateX(-loginScene.getWidth() / 2 + 130);
         newpassLabel.setTranslateY(30);
 
         newpassInput = new PasswordField();
@@ -212,9 +225,14 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         CreateNew = new Button();
         CreateNew.setText("Create a new Account");
-        CreateNew.setTranslateX(0);
-        CreateNew.setTranslateY(130);
+        CreateNew.setTranslateX(-45);
+        CreateNew.setTranslateY(CreateScene.getHeight() - 250);
         CreateNew.setOnAction(this);
+        
+        BackToLogin = new Button("Login");
+        BackToLogin.setTranslateX(190);
+        BackToLogin.setTranslateY(CreateScene.getHeight() - 250);
+        BackToLogin.setOnAction(this);
 
         Text CreateNewText = new Text("Create a new Account");
         CreateNewText.setTranslateX(25);
@@ -228,6 +246,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         enterFields.setScaleX(1.5);
         enterFields.setScaleY(1.5);
 
+        createError = new Text("Please enter a username and password");
+        createError.setVisible(false);
+        createError.setFill(Color.RED);
+        createError.setTranslateX(0);
+        createError.setTranslateY(100);
+
         // viewpropPane.getChildren().add();
 
         createPane.getChildren().add(NewUsernameLabel);
@@ -237,6 +261,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         createPane.getChildren().add(CreateNew);
         createPane.getChildren().add(CreateNewText);
         createPane.getChildren().add(enterFields);
+        createPane.getChildren().add(createError);
+        createPane.getChildren().add(BackToLogin);
 
         confirmPane.getChildren().add(BackMain);
         confirmPane.getChildren().add(Registered);
@@ -263,6 +289,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         loginPane.getChildren().add(nameInput);
         loginPane.getChildren().add(passLabel);
         loginPane.getChildren().add(passInput);
+        loginPane.getChildren().add(loginError);
+        //loginPane.getChildren().add(createError);
 
         homePane.getChildren().add(Logout);
         homePane.getChildren().add(RegisterProp);
@@ -289,24 +317,53 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         if (event.getSource() == ViewProp) {
             window.setScene(ViewPropScene);
         }
+        if (event.getSource() == btCreate){
+            window.setScene(CreateScene);
+            loginError.setVisible(false);
+        }
         if (event.getSource() == CreateNew) {
-            window.setScene(loginScene);
+            if(!NewUsername.getText().equals("") && !newpassInput.getText().equals("")){                
+                try{
+                    FileWriter writer = new FileWriter("src/lib/users/userlogin.csv",true);
+                    BufferedWriter bw = new BufferedWriter(writer);
+                    PrintWriter pw = new PrintWriter(bw);
+                    pw.print("\n" + NewUsername.getText() + "," + newpassInput.getText());
+                    pw.close();
+                }
+                catch(IOException e){
+                    System.out.println("An error has occurred");                    
+                    e.printStackTrace();
+                }
+                createError.setVisible(false);
+                window.setScene(loginScene);
+            }
+            else{
+                createError.setVisible(true);
+            }
+            
         }
         if (event.getSource() == btLogin) {
             try {
-                login();
+                loginError.setVisible(false);
+                login();                
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+        }
+        if (event.getSource() == BackToLogin){
+            window.setScene(loginScene);
+            createError.setVisible(false);
         }
     }
 
     private void login() throws IOException {
         String combined = nameInput.getText() + "," + passInput.getText();
 
-        if (searchForString(combined) && !(combined.equals("username,password,"))) {
-            window.setScene(HomeScene);
+        if (searchForString(combined) && !(combined.equals("username,password,") || combined.equals(","))) {
+            loginError.setVisible(false);
+            window.setScene(HomeScene);            
         } else {
+            loginError.setVisible(true);
             System.out.println("\nLogin Failed. Invalid Username or Password");
         }
     }
