@@ -29,6 +29,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, LocationCatIn, PrincipalResIn,
             NewUsername;
     static File source = new File("src/lib/users/userlogin.csv");
+    PropertyOwner user;
 
     @Override
     public void start(Stage primaryStage) {
@@ -87,7 +88,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         // Enter button
         btLogin = new Button("Login");
         btLogin.setTranslateX(190);
-        btLogin.setTranslateY(loginScene.getHeight() - 250);
+        btLogin.setTranslateY(loginScene.getHeight() - 350);
         btLogin.setOnAction(this);
 
         // Red error message
@@ -100,7 +101,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         // Create new account
         btCreate = new Button("Create a new account");
         btCreate.setTranslateX(-45);
-        btCreate.setTranslateY(loginScene.getHeight() - 250);
+        btCreate.setTranslateY(loginScene.getHeight() - 350);
         btCreate.setOnAction(this);
 
         // This is the start of home scene
@@ -133,7 +134,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         // Label of Register Owner
         Text Register = new Text("Register a property");
-        Register.setTranslateX(RegisterScene.getWidth() / 2 - 125);
+        Register.setTranslateX(RegisterScene.getWidth() / 2 - 200);
         Register.setTranslateY(-125);
         Register.setScaleX(2);
         Register.setScaleY(2);
@@ -163,27 +164,27 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         PrincipalRes.setTranslateY(120);
 
         OwnerIn = new TextField();
-        OwnerIn.setTranslateX(50);
+        OwnerIn.setTranslateX(80);
         OwnerIn.setTranslateY(-30);
 
         AddressIn = new TextField();
-        AddressIn.setTranslateX(50);
+        AddressIn.setTranslateX(80);
         AddressIn.setTranslateY(0);
 
         PostcodeIn = new TextField();
-        PostcodeIn.setTranslateX(50);
+        PostcodeIn.setTranslateX(80);
         PostcodeIn.setTranslateY(30);
 
         MarketValIn = new TextField();
-        MarketValIn.setTranslateX(50);
+        MarketValIn.setTranslateX(80);
         MarketValIn.setTranslateY(60);
 
         LocationCatIn = new TextField();
-        LocationCatIn.setTranslateX(50);
+        LocationCatIn.setTranslateX(80);
         LocationCatIn.setTranslateY(90);
 
         PrincipalResIn = new TextField();
-        PrincipalResIn.setTranslateX(50);
+        PrincipalResIn.setTranslateX(80);
         PrincipalResIn.setTranslateY(120);
 
         Confirm = new Button();
@@ -208,7 +209,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         // Create New Account
         // The users new username
         Label NewUsernameLabel = new Label("Username:");
-        NewUsernameLabel.setTranslateX(-RegisterScene.getWidth() / 2 + 100);
+        NewUsernameLabel.setTranslateX(-RegisterScene.getWidth() / 2 + 130);
 
         NewUsername = new TextField();
         NewUsername.setTranslateX(50);
@@ -224,13 +225,13 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         CreateNew = new Button();
         CreateNew.setText("Create a new Account");
-        CreateNew.setTranslateX(-45);
-        CreateNew.setTranslateY(CreateScene.getHeight() - 250);
+        CreateNew.setTranslateX(120);
+        CreateNew.setTranslateY(CreateScene.getHeight() - 350);
         CreateNew.setOnAction(this);
 
-        BackToLogin = new Button("Login");
-        BackToLogin.setTranslateX(190);
-        BackToLogin.setTranslateY(CreateScene.getHeight() - 250);
+        BackToLogin = new Button("Back");
+        BackToLogin.setTranslateX(-45);
+        BackToLogin.setTranslateY(CreateScene.getHeight() - 350);
         BackToLogin.setOnAction(this);
 
         Text CreateNewText = new Text("Create a new Account");
@@ -308,7 +309,13 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             window.setScene(RegisterScene);
         }
         if (event.getSource() == Confirm) {
-            window.setScene(ConfirmScene);
+            if(!(OwnerIn.getText().equals("") || AddressIn.getText().equals("") ||
+            PostcodeIn.getText().equals("") || MarketValIn.getText().equals("") ||
+            LocationCatIn.getText().equals("") || PrincipalResIn.getText().equals(""))){
+                user.getPropertyList().add(new Property(OwnerIn.getText(), AddressIn.getText(), PostcodeIn.getText(), Double.parseDouble(MarketValIn.getText()), Integer.parseInt(LocationCatIn.getText()), PrincipalResIn.getText().equals("yes")));
+                user.getPropertyList().get(user.getPropertyList().size()).writeToFile(user.getUsername());
+                window.setScene(ConfirmScene);
+            }
         }
         if (event.getSource() == BackMain) {
             window.setScene(HomeScene);
@@ -359,6 +366,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         if (searchForString(combined) && !(combined.equals("username,password,") || combined.equals(","))) {
             loginError.setVisible(false);
             window.setScene(HomeScene);
+            user = new PropertyOwner(nameInput.getText(), passInput.getText());
+
         } else {
             loginError.setVisible(true);
             System.out.println("\nLogin Failed. Invalid Username or Password");
