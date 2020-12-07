@@ -52,12 +52,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         confirmPane.setAlignment(Pos.CENTER);
         viewpropPane.setAlignment(Pos.CENTER);
 
-        CreateScene = new Scene(createPane, 380, 420);
-        loginScene = new Scene(loginPane, 380, 420);
-        HomeScene = new Scene(homePane, 320, 420);
-        RegisterScene = new Scene(registerPane, 320, 420);
-        ConfirmScene = new Scene(confirmPane, 320, 420);
-        ViewPropScene = new Scene(viewpropPane, 320, 420);
+        CreateScene = new Scene(createPane, 420, 500);
+        loginScene = new Scene(loginPane, 420, 500);
+        HomeScene = new Scene(homePane, 420, 500);
+        RegisterScene = new Scene(registerPane, 420, 500);
+        ConfirmScene = new Scene(confirmPane, 420, 500);
+        ViewPropScene = new Scene(viewpropPane, 420, 500);
 
         // Login heading
         Text loginHeading = new Text("Login");
@@ -204,7 +204,6 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         Registered.setTranslateY(-150);
         Registered.setScaleX(2);
         Registered.setScaleY(2);
-        
 
         // Create New Account
         // The users new username
@@ -228,7 +227,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         CreateNew.setTranslateX(-45);
         CreateNew.setTranslateY(CreateScene.getHeight() - 250);
         CreateNew.setOnAction(this);
-        
+
         BackToLogin = new Button("Login");
         BackToLogin.setTranslateX(190);
         BackToLogin.setTranslateY(CreateScene.getHeight() - 250);
@@ -290,7 +289,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         loginPane.getChildren().add(passLabel);
         loginPane.getChildren().add(passInput);
         loginPane.getChildren().add(loginError);
-        //loginPane.getChildren().add(createError);
+        // loginPane.getChildren().add(createError);
 
         homePane.getChildren().add(Logout);
         homePane.getChildren().add(RegisterProp);
@@ -317,40 +316,38 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         if (event.getSource() == ViewProp) {
             window.setScene(ViewPropScene);
         }
-        if (event.getSource() == btCreate){
+        if (event.getSource() == btCreate) {
             window.setScene(CreateScene);
             loginError.setVisible(false);
         }
         if (event.getSource() == CreateNew) {
-            if(!NewUsername.getText().equals("") && !newpassInput.getText().equals("")){                
-                try{
-                    FileWriter writer = new FileWriter("src/lib/users/userlogin.csv",true);
+            if (!NewUsername.getText().equals("") && !newpassInput.getText().equals("")) {
+                try {
+                    FileWriter writer = new FileWriter("src/lib/users/userlogin.csv", true);
                     BufferedWriter bw = new BufferedWriter(writer);
                     PrintWriter pw = new PrintWriter(bw);
                     pw.print("\n" + NewUsername.getText() + "," + newpassInput.getText());
                     pw.close();
-                }
-                catch(IOException e){
-                    System.out.println("An error has occurred");                    
+                } catch (IOException e) {
+                    System.out.println("An error has occurred");
                     e.printStackTrace();
                 }
                 createError.setVisible(false);
                 window.setScene(loginScene);
-            }
-            else{
+            } else {
                 createError.setVisible(true);
             }
-            
+
         }
         if (event.getSource() == btLogin) {
             try {
                 loginError.setVisible(false);
-                login();                
+                login();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
-        if (event.getSource() == BackToLogin){
+        if (event.getSource() == BackToLogin) {
             window.setScene(loginScene);
             createError.setVisible(false);
         }
@@ -361,7 +358,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         if (searchForString(combined) && !(combined.equals("username,password,") || combined.equals(","))) {
             loginError.setVisible(false);
-            window.setScene(HomeScene);            
+            window.setScene(HomeScene);
         } else {
             loginError.setVisible(true);
             System.out.println("\nLogin Failed. Invalid Username or Password");
@@ -369,7 +366,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     }
 
     private static boolean searchForString(String s) throws FileNotFoundException {
-        final Scanner scanner = new Scanner(LoginGUI.source);
+        final Scanner scanner = new Scanner(source);
 
         while (scanner.hasNextLine()) {
             final String lineFromFile = scanner.nextLine();
