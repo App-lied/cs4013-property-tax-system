@@ -1,12 +1,10 @@
 //a class to handle the terminal implementation of the main user interface
 
 import java.util.Scanner;
-import java.io.File;
 import java.io.IOException;
 
 public class MainSystem {
     
-    private static File source = new File("src/lib/properties/property_info.csv");
     private Scanner in;
 
     public MainSystem(){
@@ -52,20 +50,24 @@ public class MainSystem {
 
         System.out.print("Enter your full name: ");
         answers[0] = in.nextLine();
-        System.out.print("\nEnter the property's address: ");
+        System.out.print("\nEnter the property's address line 1: ");
         answers[1] = in.nextLine();
+        System.out.print("\nEnter address line 2: ");
+        answers[1] = answers[1] + " " + in.nextLine();
+        System.out.print("\nEnter County: ");
+        answers[1] = answers[1] + " " + in.nextLine();
         System.out.print("\nEnter the property's eircode: ");
         answers[2] = in.nextLine();
         System.out.print("\nEnter the property's estimated market value: ");
         answers[3] = in.nextLine();
         System.out.print("\nEnter the property's location " +
         "\n(0 for countryside, 1 for village, 2 for small town, 3 for large town, 4 for city):\n ");
-        answers[4] = in.nextLine();
+        answers[4] = Integer.toString(in.nextInt());
         System.out.print("Is this your principal private residence? y/n: ");
         answers[5] = in.nextLine();
 
         //make sure the user doesn't enter an out of bounds number
-        if(Integer.parseInt(answers[4]) > 4){
+        if(Integer.parseInt(answers[4]) > 4 || Integer.parseInt(answers[4]) < 0){
             answers[4] = "4";
         }
 
