@@ -103,7 +103,3 @@ public class Login {
         }
     }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 9d684ffd54dae0796d79ff377327b1d7373a9166

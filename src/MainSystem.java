@@ -1,8 +1,5 @@
 import java.util.Scanner;
-<<<<<<< HEAD
-=======
 //import java.io.File;
->>>>>>> 9d684ffd54dae0796d79ff377327b1d7373a9166
 import java.io.IOException;
 
 /**
