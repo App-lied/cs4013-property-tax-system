@@ -1,10 +1,8 @@
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Scanner;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,7 +27,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, LocationCatIn, PrincipalResIn,
             NewUsername;
     static File source = new File("src/lib/users/userlogin.csv");
-    PropertyOwner user;
+    User user;
 
     @Override
     public void start(Stage primaryStage) {
@@ -312,8 +310,10 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             if(!(OwnerIn.getText().equals("") || AddressIn.getText().equals("") ||
             PostcodeIn.getText().equals("") || MarketValIn.getText().equals("") ||
             LocationCatIn.getText().equals("") || PrincipalResIn.getText().equals(""))){
-                user.getPropertyList().add(new Property(OwnerIn.getText(), AddressIn.getText(), PostcodeIn.getText(), Double.parseDouble(MarketValIn.getText()), Integer.parseInt(LocationCatIn.getText()), PrincipalResIn.getText().equals("yes")));
-                user.getPropertyList().get(user.getPropertyList().size()).writeToFile(user.getUsername());
+                if(user instanceof PropertyOwner){
+                    ((PropertyOwner)user).getPropertyList().add(new Property(OwnerIn.getText(), AddressIn.getText(), PostcodeIn.getText(), Double.parseDouble(MarketValIn.getText()), Integer.parseInt(LocationCatIn.getText()), PrincipalResIn.getText().equals("yes")));
+                    ((PropertyOwner)user).getPropertyList().get(((PropertyOwner)user).getPropertyList().size() - 1).writeToFile(user.getUsername());
+                }
                 window.setScene(ConfirmScene);
             }
         }
@@ -363,10 +363,14 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     private void login() throws IOException {
         String combined = nameInput.getText() + "," + passInput.getText();
 
-        if (searchForString(combined) && !(combined.equals("username,password,") || combined.equals(","))) {
+        if (Utils.searchForString(source, combined) && !(combined.equals("username,password,") || combined.equals(","))) {
             loginError.setVisible(false);
             window.setScene(HomeScene);
-            user = new PropertyOwner(nameInput.getText(), passInput.getText());
+            if(Utils.searchForString(source, combined + ",true")){
+                user = new Admin(nameInput.getText(), passInput.getText());
+            } else {
+                user = new PropertyOwner(nameInput.getText(), passInput.getText());
+            }
 
         } else {
             loginError.setVisible(true);
@@ -374,20 +378,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         }
     }
 
-    private static boolean searchForString(String s) throws FileNotFoundException {
-        final Scanner scanner = new Scanner(source);
-
-        while (scanner.hasNextLine()) {
-            final String lineFromFile = scanner.nextLine();
-            if (lineFromFile.contains(s)) {
-                scanner.close();
-                return true;
-            }
-        }
-
-        scanner.close();
-        return false;
-    }
+    
 
     public static void main(String[] args) {
         launch(args);
