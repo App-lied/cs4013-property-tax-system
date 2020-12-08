@@ -4,10 +4,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -24,8 +27,11 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropPane;
     Text createError, loginError;
     private PasswordField passInput, newpassInput;
-    private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, LocationCatIn, PrincipalResIn,
+    private TextField nameInput, OwnerIn, AddressInLine1, PostcodeIn, MarketValIn,
             NewUsername;
+    private CheckBox PrincipalResIn;
+    private ComboBox<String> LocationCatIn;
+    private static String[] locations = {"Countryside", "Village", "Small Town", "Large Town", "City"};
     static File source = new File("src/lib/users/userlogin.csv");
     User user;
 
@@ -165,9 +171,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         OwnerIn.setTranslateX(80);
         OwnerIn.setTranslateY(-30);
 
-        AddressIn = new TextField();
-        AddressIn.setTranslateX(80);
-        AddressIn.setTranslateY(0);
+        AddressInLine1 = new TextField();
+        AddressInLine1.setTranslateX(80);
+        AddressInLine1.setTranslateY(0);
 
         PostcodeIn = new TextField();
         PostcodeIn.setTranslateX(80);
@@ -177,11 +183,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         MarketValIn.setTranslateX(80);
         MarketValIn.setTranslateY(60);
 
-        LocationCatIn = new TextField();
+        String[] categories = {"City", "Large Town", "Small Town", "Village", "Countryside"};
+        LocationCatIn = new ComboBox<String>(FXCollections.observableArrayList(categories));
         LocationCatIn.setTranslateX(80);
         LocationCatIn.setTranslateY(90);
 
-        PrincipalResIn = new TextField();
+        PrincipalResIn = new CheckBox();
         PrincipalResIn.setTranslateX(80);
         PrincipalResIn.setTranslateY(120);
 
@@ -274,7 +281,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         registerPane.getChildren().add(Confirm);
         registerPane.getChildren().add(Register);
         registerPane.getChildren().add(OwnerIn);
-        registerPane.getChildren().add(AddressIn);
+        registerPane.getChildren().add(AddressInLine1);
         registerPane.getChildren().add(PostcodeIn);
         registerPane.getChildren().add(LocationCatIn);
         registerPane.getChildren().add(MarketValIn);
@@ -307,11 +314,11 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             window.setScene(RegisterScene);
         }
         if (event.getSource() == Confirm) {
-            if(!(OwnerIn.getText().equals("") || AddressIn.getText().equals("") ||
-            PostcodeIn.getText().equals("") || MarketValIn.getText().equals("") ||
-            LocationCatIn.getText().equals("") || PrincipalResIn.getText().equals(""))){
+            if(!(OwnerIn.getText().equals("") || AddressInLine1.getText().equals("") ||
+            PostcodeIn.getText().equals("") || MarketValIn.getText().equals(""))){
+                
                 if(user instanceof PropertyOwner){
-                    ((PropertyOwner)user).getPropertyList().add(new Property(OwnerIn.getText(), AddressIn.getText(), PostcodeIn.getText(), Double.parseDouble(MarketValIn.getText()), Integer.parseInt(LocationCatIn.getText()), PrincipalResIn.getText().equals("yes")));
+                    ((PropertyOwner)user).getPropertyList().add(new Property(OwnerIn.getText(), AddressInLine1.getText(), PostcodeIn.getText(), Double.parseDouble(MarketValIn.getText()), categoryAsInt(LocationCatIn.getValue()), PrincipalResIn.isSelected()));
                     ((PropertyOwner)user).getPropertyList().get(((PropertyOwner)user).getPropertyList().size() - 1).writeToFile(user.getUsername());
                 }
                 window.setScene(ConfirmScene);
@@ -378,6 +385,15 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         }
     }
 
+    private static int categoryAsInt(String category){
+        int i;
+        for(i = 0; i < locations.length; i++){
+            if(category.equals(locations[i])){
+                return i;
+            }
+        }
+        return -1;
+    }
     
 
     public static void main(String[] args) {
