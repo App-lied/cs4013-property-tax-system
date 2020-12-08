@@ -4,63 +4,69 @@ import java.io.*;
 import java.util.Scanner;
 
 public class MainSystem {
-    
+
     private static File source = new File("src/lib/properties/property_info.csv");
     private Scanner in;
 
-    public MainSystem(){
+    public MainSystem() {
         in = new Scanner(System.in);
     }
 
-    public void run(User user) throws IOException{
-        if(user instanceof Admin){
+    public void run(User user) throws IOException {
+        if (user instanceof Admin) {
             runAdmin(user);
         } else {
             runPropertyOwner(user);
         }
     }
 
-    private void runAdmin(User user) throws IOException{
+    private void runAdmin(User user) throws IOException {
     }
 
-    private void runPropertyOwner(User user) throws IOException{
+    private void runPropertyOwner(User user) throws IOException {
 
         System.out.println("Press 'V' to view your properties. Press 'P' to register a new property. Press 'Q' to exit.");
         boolean running = true;
-        while(running){
+        while (running) {
             String choice = in.nextLine().toLowerCase();
 
-            if(choice.equals("p")){
+            if (choice.equals("p")) {
                 registerProperty(user);
-            } else if(choice.equals("q")){
+            } else if (choice.equals("q")) {
                 System.out.println("System exiting.");
                 running = false;
-            } else if(choice.equals("v")){
+            } else if (choice.equals("v")) {
                 displayProperties(user);
             }
         }
         System.exit(0);
     }
 
+
     private void displayProperties(User user) throws IOException {
         String path = "src/lib/properties/property_info.csv";
         String line = "";
-        if(user == user) {
-            try
-                    (BufferedReader br = new BufferedReader(new FileReader(path))) {
-                while ((line = br.readLine()) != null) {
-                    String[] values = line.split(",");
-                    System.out.println("Address is " + values[1]);
+/**
+        try
+                (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                if (user.equals(propertyOwner)) {
+                    System.out.println("The address of this property is " + values[1]);
+                } else {
+                    System.out.println("not owned");
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        }
+**/
+    }
 
-    private void registerProperty(User user) throws IOException{
+
+    private void registerProperty(User user) throws IOException {
         String[] answers = new String[6];
 
         System.out.print("Enter your full name: ");
@@ -72,25 +78,25 @@ public class MainSystem {
         System.out.print("\nEnter the property's estimated market value: ");
         answers[3] = in.nextLine();
         System.out.print("\nEnter the property's location " +
-        "\n(0 for countryside, 1 for village, 2 for small town, 3 for large town, 4 for city):\n ");
+                "\n(0 for countryside, 1 for village, 2 for small town, 3 for large town, 4 for city):\n ");
         answers[4] = in.nextLine();
         System.out.print("Is this your principal private residence? y/n: ");
         answers[5] = in.nextLine();
 
         //make sure the user doesn't enter an out of bounds number
-        if(Integer.parseInt(answers[4]) > 4){
+        if (Integer.parseInt(answers[4]) > 4) {
             answers[4] = "4";
         }
 
         //rewrite to match csv formatting
-        if(answers[5].equals("y")){
+        if (answers[5].equals("y")) {
             answers[5] = "yes";
         } else {
             answers[5] = "no";
         }
 
-        Property newProperty = new Property(answers[0], answers[1], answers[2], 
-        Double.parseDouble(answers[3]), Integer.parseInt(answers[4]), (answers[5].equals("yes") ? true : false));
+        Property newProperty = new Property(answers[0], answers[1], answers[2],
+                Double.parseDouble(answers[3]), Integer.parseInt(answers[4]), (answers[5].equals("yes") ? true : false));
 
         newProperty.writeToFile(user.getUsername());
         runPropertyOwner(user);

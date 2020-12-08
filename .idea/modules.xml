@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/cs4013-property-tax-system.iml" filepath="$PROJECT_DIR$/cs4013-property-tax-system.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../Program Files/javafx-sdk-15.0.1/javafx-sdk-15.0.1.iml" filepath="$PROJECT_DIR$/../../../../Program Files/javafx-sdk-15.0.1/javafx-sdk-15.0.1.iml" />
     </modules>
   </component>
 </project>
