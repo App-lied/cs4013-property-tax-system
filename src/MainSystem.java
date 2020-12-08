@@ -79,13 +79,24 @@ public class MainSystem {
         }
 
         System.out.println("Enter the number of the property to view payments. Press 'Q' to exit.");
-        String input = in.nextLine();
+        int choice = -1;
+        String input = "";
+        if(in.hasNextInt()){
+            choice = in.nextInt() - 1;
+        } else {
+            input = in.nextLine();
+        }
+
+        if(choice == -1 && input.length() > 0 && !input.toLowerCase().equals("q")){
+            System.out.println("Invalid input.\n");
+            displayProperties(user);
+        }
 
         if(input.toLowerCase().equals("q")){
             return null;
         }
 
-        int c = Integer.parseInt(input) - 1;
+        int c = choice;
 
         if(c >= 0 && c < ((PropertyOwner)user).getPropertyList().size()){
             return ((PropertyOwner)user).getPropertyList().get(c);
@@ -100,10 +111,21 @@ public class MainSystem {
         }
 
         System.out.println("Enter the number of the payment to make payment. Press 'Q' to exit.");
-        String input = in.nextLine();
+        int choice = -1;
+        String input = "";
+        if(in.hasNextInt()){
+            choice = in.nextInt() - 1;
+        } else {
+            input = in.nextLine();
+        }
+
+        if(choice == -1 && input.length() > 0 && !input.toLowerCase().equals("q")){
+            System.out.println("Invalid input.");
+            displayPayments(p);
+        }
 
         if(!input.toLowerCase().equals("q")){
-            int c = Integer.parseInt(input) - 1;
+            int c = choice;
             if(c >= 0 && c < p.getPaymentList().size()){
                 if(p.getPaymentList().get(c).isPaid()){
                     System.out.println("Payment has already been made.");
