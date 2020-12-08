@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -13,6 +15,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -24,7 +27,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
     Scene loginScene, HomeScene, CreateScene, RegisterScene, ConfirmScene, ViewPropScene;
     Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew, BackToLogin;
-    GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropPane;
+    GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropRoot;
+    ScrollPane viewpropPane;
     Text createError, loginError;
     private PasswordField passInput, newpassInput;
     private TextField nameInput, OwnerIn, AddressInLine1, PostcodeIn, MarketValIn,
@@ -34,6 +38,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     private static String[] locations = {"Countryside", "Village", "Small Town", "Large Town", "City"};
     static File source = new File("src/lib/users/userlogin.csv");
     User user;
+    ArrayList<Text> addresses = new ArrayList<Text>();
+    ArrayList<Button> buttons = new ArrayList<Button>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -47,7 +53,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         createPane = new GridPane();
         registerPane = new GridPane();
         confirmPane = new GridPane();
-        viewpropPane = new GridPane();
+        viewpropRoot = new GridPane();
+        viewpropPane = new ScrollPane();        
 
         // Allign
         loginPane.setAlignment(Pos.CENTER);
@@ -55,14 +62,14 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         createPane.setAlignment(Pos.CENTER);
         registerPane.setAlignment(Pos.CENTER);
         confirmPane.setAlignment(Pos.CENTER);
-        viewpropPane.setAlignment(Pos.CENTER);
+        viewpropRoot.setAlignment(Pos.CENTER);
 
         CreateScene = new Scene(createPane, 420, 500);
         loginScene = new Scene(loginPane, 420, 500);
         HomeScene = new Scene(homePane, 420, 500);
         RegisterScene = new Scene(registerPane, 420, 500);
-        ConfirmScene = new Scene(confirmPane, 420, 500);
-        ViewPropScene = new Scene(viewpropPane, 420, 500);
+        ConfirmScene = new Scene(confirmPane, 420, 500);        
+        ViewPropScene = new Scene(viewpropRoot, 420, 500);        
 
         // Login heading
         Text loginHeading = new Text("Login");
@@ -135,6 +142,14 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         Logout.setTranslateX(280 / 2);
         Logout.setTranslateY(-380 / 2);
         Logout.setOnAction(this);
+
+        // View properties:        
+        Text Properties = new Text("Properties");
+        Properties.setTranslateX(RegisterScene.getWidth() / 2 - 150);
+        Properties.setTranslateY(-225);
+        Properties.setScaleX(2);
+        Properties.setScaleY(2);
+        viewpropPane.setContent(viewpropRoot);       
 
         // Label of Register Owner
         Text Register = new Text("Register a property");
@@ -257,7 +272,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         createError.setTranslateX(0);
         createError.setTranslateY(100);
 
-        // viewpropPane.getChildren().add();
+        viewpropRoot.getChildren().add(Properties);        
 
         createPane.getChildren().add(NewUsernameLabel);
         createPane.getChildren().add(NewUsername);
@@ -294,8 +309,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         loginPane.getChildren().add(nameInput);
         loginPane.getChildren().add(passLabel);
         loginPane.getChildren().add(passInput);
-        loginPane.getChildren().add(loginError);
-        // loginPane.getChildren().add(createError);
+        loginPane.getChildren().add(loginError);        
 
         homePane.getChildren().add(Logout);
         homePane.getChildren().add(RegisterProp);
@@ -377,7 +391,16 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                 user = new Admin(nameInput.getText(), passInput.getText());
             } else {
                 user = new PropertyOwner(nameInput.getText(), passInput.getText());
-            }
+                int i;
+                int j = -130;
+                for(i = 0; i < ((PropertyOwner)user).getPropertyList().size(); i++){
+                    addresses.add(new Text(((PropertyOwner)user).getPropertyList().get(i).getAddress()));
+                    addresses.get(i).setTranslateX(-80);
+                    addresses.get(i).setTranslateY(j);
+                    viewpropRoot.getChildren().add(addresses.get(i));
+                    j += 30;
+                }
+            }            
 
         } else {
             loginError.setVisible(true);
