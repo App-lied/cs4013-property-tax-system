@@ -43,6 +43,11 @@ public class Property {
         this.category = category;
         this.principalResidence = principalResidence;
         paymentList = findPayments();
+        if(paymentList.size() == 0){
+            createPaymentHistory();
+            Collections.sort(paymentList);
+        }
+        
     }
 
     /**
@@ -165,6 +170,25 @@ public class Property {
             System.out.println(e.getMessage());
             System.out.println("Property registration failed.");
         }
+    }
+
+    /**
+     * A method to create and store the payments for this property if it has no history.
+     */
+    public void createPaymentHistory(){
+        ArrayList<Payment> newHistory = new ArrayList<Payment>(5);
+
+        for(int i = 0; i < 5; i++){
+            newHistory.add(new Payment(2015+i, 0, false));
+        }
+
+        TaxCalculator c = new TaxCalculator(this);
+        for(Payment p : newHistory){
+            p.setAmount(c.getTaxPayable(p));
+            p.writeToFile(this.postcode);
+        }
+
+        this.paymentList = newHistory;
     }
 
     /**

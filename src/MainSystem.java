@@ -36,6 +36,24 @@ public class MainSystem {
      * @throws IOException
      */
     private void runAdmin(User user) throws IOException{
+        System.out.println("Press 'V' to view users.\nPress 'O' to view overdue payments.\nPress 'S' to view statistics.\nPress 'Q' to exit.");
+        boolean running = true;
+
+        while(running){
+            String choice = in.nextLine().toLowerCase();
+
+            if(choice.equals("v")){
+                displayUsers(user);
+            } else if(choice.equals("o")){
+
+            } else if(choice.equals("s")){
+                
+            } else if (choice.equals("q")){
+                System.out.println("System exiting.");
+                running = false;
+            }
+        }
+        System.exit(0);
     }
 
     /**
@@ -67,6 +85,40 @@ public class MainSystem {
     }
 
     /**
+     * Provides functionality for a logged-in admin to view all users.
+     * @param user
+     * @throws IOException
+     */
+    private void displayUsers(User user) throws IOException{
+        for(int i = 0; i < ((Admin)user).getUsers().size(); i++){
+            System.out.println((i + 1) + ") " + ((Admin)user).getUsers().get(i).getUsername());
+            System.out.println();
+        }
+
+        System.out.println("Enter the number of the user to view properties. Press 'Q' to exit.");
+        int choice = -1;
+        String input = "";
+        if(in.hasNextInt()){
+            choice = in.nextInt() - 1;
+        } else {
+            input = in.nextLine().toLowerCase();
+        }
+
+        if(choice == -1 && input.length() > 0 && !input.equals("q")){
+            System.out.println("Invalid input.");
+            displayUsers(user);
+        }
+
+        if(!input.equals("q")){
+            Object o = displayProperties(((Admin)user).getUsers().get(choice));
+            if(o != null){
+                displayPayments((Property)o);
+            }
+            runAdmin(user);
+        }
+    }
+
+    /**
      * A private method to display the currently logged in property owner's list of properties.
      * @param user The currently logged-in user.
      * @return The selected property as a Property object. Null if the user exits.
@@ -84,15 +136,15 @@ public class MainSystem {
         if(in.hasNextInt()){
             choice = in.nextInt() - 1;
         } else {
-            input = in.nextLine();
+            input = in.nextLine().toLowerCase();
         }
 
-        if(choice == -1 && input.length() > 0 && !input.toLowerCase().equals("q")){
+        if(choice == -1 && input.length() > 0 && !input.equals("q")){
             System.out.println("Invalid input.\n");
             displayProperties(user);
         }
 
-        if(input.toLowerCase().equals("q")){
+        if(input.equals("q")){
             return null;
         }
 
@@ -105,6 +157,12 @@ public class MainSystem {
         }
     }
 
+    /**
+     * A private method to display to the PropertyOwner the payments associated with the property they have selected.
+     * Allows them to select and make a payment.
+     * @param p The property to view the payments on.
+     * @throws IOException
+     */
     private void displayPayments(Property p) throws IOException{
         for(int i = 0; i < p.getPaymentList().size(); i++){
             System.out.println((i + 1) + ") " + (p.getPaymentList().get(i).toString()));
@@ -116,15 +174,15 @@ public class MainSystem {
         if(in.hasNextInt()){
             choice = in.nextInt() - 1;
         } else {
-            input = in.nextLine();
+            input = in.nextLine().toLowerCase();
         }
 
-        if(choice == -1 && input.length() > 0 && !input.toLowerCase().equals("q")){
+        if(choice == -1 && input.length() > 0 && !input.equals("q")){
             System.out.println("Invalid input.");
             displayPayments(p);
         }
 
-        if(!input.toLowerCase().equals("q")){
+        if(!input.equals("q")){
             int c = choice;
             if(c >= 0 && c < p.getPaymentList().size()){
                 if(p.getPaymentList().get(c).isPaid()){
@@ -186,6 +244,8 @@ public class MainSystem {
         Property newProperty = new Property(answers[0], answers[1], answers[2], 
         Double.parseDouble(answers[3]), Integer.parseInt(answers[4]), (answers[5].equals("yes") ? true : false));
 
+        ((PropertyOwner) user).getPropertyList().add(newProperty);
+        newProperty.createPaymentHistory();
         newProperty.writeToFile(user.getUsername());
         runPropertyOwner(user);
     }
