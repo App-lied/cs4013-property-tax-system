@@ -37,16 +37,16 @@ public class MainSystem {
      * @throws IOException
      */
     private void runAdmin(User user) throws IOException{
-        System.out.println("Press 'V' to view users.\nPress 'O' to view overdue payments.\nPress 'S' to view statistics.\nPress 'Q' to exit.");
         boolean running = true;
 
         while(running){
+            System.out.println("Press 'V' to view users.\nPress 'O' to view overdue payments.\nPress 'S' to view statistics.\nPress 'Q' to exit.");
             String choice = in.nextLine().toLowerCase();
 
             if(choice.equals("v")){
                 displayUsers(user);
             } else if(choice.equals("o")){
-
+                overduePayments();
             } else if(choice.equals("s")){
                 displayStatistics();;
             } else if (choice.equals("q")){
@@ -64,9 +64,9 @@ public class MainSystem {
      */
     private void runPropertyOwner(User user) throws IOException{
 
-        System.out.println("Press 'V' to view your properties. Press 'P' to register a new property. Press 'Q' to exit.");
         boolean running = true;
         while(running){
+            System.out.println("Press 'V' to view your properties. Press 'P' to register a new property. Press 'Q' to exit.");
             String choice = in.nextLine().toLowerCase();
 
             if(choice.equals("p")){
@@ -115,7 +115,6 @@ public class MainSystem {
             if(o != null){
                 displayPayments((Property)o);
             }
-            runAdmin(user);
         }
     }
 
@@ -204,6 +203,60 @@ public class MainSystem {
 
     }
 
+    private void overduePayments(){
+        boolean running = true;
+        System.out.println("Enter the year to search overdue payments for.");
+        
+        
+        String input = "";
+        int year = -1;
+        if(in.hasNextInt()){
+            year = in.nextInt();
+        } else {
+            input = in.nextLine().toLowerCase();
+        }
+
+        if(year == -1 && input.length() > 0){
+            System.out.println("Invalid input. Please try again.");
+            overduePayments();
+        }
+
+        running = true;
+        String key = ",";
+        while(running){
+            System.out.println("Would you like to search by routing key? y/n");
+            in.nextLine();
+            String choice = in.nextLine().toLowerCase();
+
+            if(choice.equals("y")){
+                System.out.println("Enter the 3 character eircode routing key to search by: ");
+                key = in.nextLine().toUpperCase();
+
+                while(running){
+                    if(key.length() != 3){
+                        System.out.println("Invalid routing key. Please try again.");
+                    } else {
+                        running = false;
+                    }
+                }
+            } else if(choice.equals("n")){
+                running = false;
+            } else{
+                System.out.println("Invalid input. Please try again.");
+            }
+        }
+
+        ArrayList<Payment> overduePayments = Utils.findPaymentsByRoutingKey(key);
+        for(Payment p : overduePayments){
+            if(p.getYear() == year && !p.isPaid()){
+                System.out.println(p.toString());
+            }
+        }
+    }
+
+    /**
+     * A private method for a logged-in admin to view statistics based on a routing key.
+     */
     private void displayStatistics(){
         boolean running = true;
         String key = "";

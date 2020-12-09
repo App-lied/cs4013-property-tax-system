@@ -40,7 +40,7 @@ public class Utils {
             while(scanner.hasNextLine()){
                 final String lineFromFile = scanner.nextLine();
 
-                if(lineFromFile.contains(key)){
+                if(lineFromFile.contains(key) && !lineFromFile.contains("year")){
                     String[] s = lineFromFile.split(",");
                     result.add(new Payment(Integer.parseInt(s[0]), Double.parseDouble(s[1]),
                     (s[2].equals("true") ? true : false)));
