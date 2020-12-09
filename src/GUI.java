@@ -26,7 +26,7 @@ import javafx.geometry.Pos;
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
     Scene loginScene, HomeScene, CreateScene, RegisterScene, ConfirmScene, ViewPropScene, propScene;
-    Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew, BackToLogin, BackFromViewProp, BackFromRegister;
+    Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew, BackToLogin, BackFromViewProp, BackFromRegister, BackFromProp;
     GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropRoot, propRoot;
     ScrollPane viewpropPane;
     Text createError, loginError;
@@ -161,7 +161,10 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         BackFromViewProp.setOnAction(this);
         
         // Property:
-
+        BackFromProp = new Button("Back");
+        BackFromProp.setTranslateX(-90);
+        BackFromProp.setTranslateY(-200);
+        BackFromProp.setOnAction(this);
 
         // Label of Register Owner
         Text Register = new Text("Register a property");
@@ -290,7 +293,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         createError.setTranslateY(100);
 
         viewpropRoot.getChildren().add(Properties);
-        viewpropRoot.getChildren().add(BackFromViewProp);        
+        viewpropRoot.getChildren().add(BackFromViewProp);
+        
+        propRoot.getChildren().add(BackFromProp);
 
         createPane.getChildren().add(NewUsernameLabel);
         createPane.getChildren().add(NewUsername);
@@ -419,6 +424,10 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             window.setScene(HomeScene);
             viewpropRoot.getChildren().clear();
             viewpropRoot.getChildren().add(BackFromViewProp);            
+        }
+
+        if (event.getSource() == BackFromProp){
+            window.setScene(ViewPropScene);
         }
 
         if (event.getSource() == BackFromRegister) {
