@@ -1,6 +1,7 @@
 import java.util.Scanner;
 //import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * A class to handle the main interface of the system's terminal implementation.
@@ -47,7 +48,7 @@ public class MainSystem {
             } else if(choice.equals("o")){
 
             } else if(choice.equals("s")){
-                
+                displayStatistics();;
             } else if (choice.equals("q")){
                 System.out.println("System exiting.");
                 running = false;
@@ -201,6 +202,63 @@ public class MainSystem {
             }
         }
 
+    }
+
+    private void displayStatistics(){
+        boolean running = true;
+        String key = "";
+        while(running){
+            System.out.println("Enter the 3 character eircode routing key to search by: ");
+            key = in.nextLine().toUpperCase();
+
+            if(key.length() != 3){
+                System.out.println("Invalid routing key. Please try again.");
+            } else {
+                running = false;
+            }
+        }
+
+        ArrayList<Payment> routedPayments = Utils.findPaymentsByRoutingKey(key);
+        
+        System.out.println("\nPress 'T' to view the total tax paid for this area.\nPress 'A' to view the average tax paid.\n" +
+            "Press 'N' to view the number and percentage of taxes paid.\n Press 'Q' to return.");
+        running = true;
+        while(running){
+            String choice = in.nextLine().toLowerCase();
+
+            if(choice.equals("t")){
+                double total = 0;
+                for(Payment p : routedPayments){
+                    if(p.isPaid()){
+                        total = total + p.getAmount();
+                    }
+                }
+                System.out.println("Total tax paid: €" + total + "\n");
+
+            } else if(choice.equals("a")){
+                double total = 0;
+                double count = 0;
+                for(Payment p : routedPayments){
+                    if(p.isPaid()){
+                        total = total + p.getAmount();
+                        count = count + 1;
+                    }
+                }
+                System.out.println("Average tax paid: €" + String.format("%.2f",(total / count)) + "\n");
+
+            } else if(choice.equals("n")){
+                int count = 0;
+                for(Payment p : routedPayments){
+                    if(p.isPaid()){
+                        count++;
+                    }
+                }
+                System.out.println(count + "/" + routedPayments.size() + " payments made.\n" + 
+                "" + String.format("%.2f",((double)count / (double)routedPayments.size())*100) + "% payment rate.\n");
+            } else if(choice.equals("q")){
+                running = false;
+            }
+        }
     }
 
     /**
