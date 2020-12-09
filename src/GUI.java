@@ -25,9 +25,9 @@ import javafx.geometry.Pos;
 
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
-    Scene loginScene, HomeScene, CreateScene, RegisterScene, ConfirmScene, ViewPropScene;
-    Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew, BackToLogin;
-    GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropRoot;
+    Scene loginScene, HomeScene, CreateScene, RegisterScene, ConfirmScene, ViewPropScene, propScene;
+    Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew, BackToLogin, BackFromViewProp, BackFromRegister;
+    GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropRoot, propRoot;
     ScrollPane viewpropPane;
     Text createError, loginError;
     private PasswordField passInput, newpassInput;
@@ -38,8 +38,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     private static String[] locations = {"Countryside", "Village", "Small Town", "Large Town", "City"};
     static File source = new File("src/lib/users/userlogin.csv");
     User user;
-    ArrayList<Text> addresses = new ArrayList<Text>();
-    ArrayList<Button> buttons = new ArrayList<Button>();
+    private ArrayList<Text> addresses = new ArrayList<Text>();
+    private ArrayList<Button> buttons = new ArrayList<Button>();
+    private Property viewedProperty;
 
     @Override
     public void start(Stage primaryStage) {
@@ -54,7 +55,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         registerPane = new GridPane();
         confirmPane = new GridPane();
         viewpropRoot = new GridPane();
-        viewpropPane = new ScrollPane();        
+        viewpropPane = new ScrollPane();
+        propRoot = new GridPane();        
 
         // Allign
         loginPane.setAlignment(Pos.CENTER);
@@ -63,13 +65,15 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         registerPane.setAlignment(Pos.CENTER);
         confirmPane.setAlignment(Pos.CENTER);
         viewpropRoot.setAlignment(Pos.CENTER);
+        propRoot.setAlignment(Pos.CENTER);
 
         CreateScene = new Scene(createPane, 420, 500);
         loginScene = new Scene(loginPane, 420, 500);
         HomeScene = new Scene(homePane, 420, 500);
         RegisterScene = new Scene(registerPane, 420, 500);
         ConfirmScene = new Scene(confirmPane, 420, 500);        
-        ViewPropScene = new Scene(viewpropRoot, 420, 500);        
+        ViewPropScene = new Scene(viewpropRoot, 420, 500);
+        propScene = new Scene(propRoot, 420, 500);        
 
         // Login heading
         Text loginHeading = new Text("Login");
@@ -149,7 +153,15 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         Properties.setTranslateY(-225);
         Properties.setScaleX(2);
         Properties.setScaleY(2);
-        viewpropPane.setContent(viewpropRoot);       
+        viewpropPane.setContent(viewpropRoot);
+        
+        BackFromViewProp = new Button("Back");
+        BackFromViewProp.setTranslateX(-90);
+        BackFromViewProp.setTranslateY(-200);
+        BackFromViewProp.setOnAction(this);
+        
+        // Property:
+
 
         // Label of Register Owner
         Text Register = new Text("Register a property");
@@ -213,6 +225,11 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         Confirm.setTranslateY(160);
         Confirm.setOnAction(this);
 
+        BackFromRegister = new Button("Back");
+        BackFromRegister.setTranslateX(-90);
+        BackFromRegister.setTranslateY(-200);
+        BackFromRegister.setOnAction(this);
+
         // Confirm Scene
         BackMain = new Button();
         BackMain.setText("Go Back To Main Menu");
@@ -272,7 +289,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         createError.setTranslateX(0);
         createError.setTranslateY(100);
 
-        viewpropRoot.getChildren().add(Properties);        
+        viewpropRoot.getChildren().add(Properties);
+        viewpropRoot.getChildren().add(BackFromViewProp);        
 
         createPane.getChildren().add(NewUsernameLabel);
         createPane.getChildren().add(NewUsername);
@@ -301,6 +319,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         registerPane.getChildren().add(LocationCatIn);
         registerPane.getChildren().add(MarketValIn);
         registerPane.getChildren().add(PrincipalResIn);
+        registerPane.getChildren().add(BackFromRegister);
 
         loginPane.getChildren().add(loginHeading);
         loginPane.getChildren().add(btLogin);
@@ -323,6 +342,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         if (event.getSource() == Logout) {
             window.setScene(loginScene);
+            nameInput.clear();
+            passInput.clear();
         }
         if (event.getSource() == RegisterProp) {
             window.setScene(RegisterScene);
@@ -342,6 +363,21 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             window.setScene(HomeScene);
         }
         if (event.getSource() == ViewProp) {
+            int i;
+            int j = -130;
+            for(i = 0; i < ((PropertyOwner)user).getPropertyList().size(); i++){
+                final int l = i;
+                addresses.add(new Text(((PropertyOwner)user).getPropertyList().get(i).getAddress()));
+                addresses.get(i).setTranslateX(-80);
+                addresses.get(i).setTranslateY(j);
+                buttons.add(new Button("View"));
+                buttons.get(i).setTranslateX(160);
+                buttons.get(i).setTranslateY(j);
+                buttons.get(i).setOnAction(e -> {viewedProperty = ((PropertyOwner)user).getPropertyList().get(l); System.out.println(viewedProperty); window.setScene(propScene);});
+                viewpropRoot.getChildren().add(addresses.get(i));
+                viewpropRoot.getChildren().add(buttons.get(i));
+                j += 30;
+            }
             window.setScene(ViewPropScene);
         }
         if (event.getSource() == btCreate) {
@@ -379,6 +415,15 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             window.setScene(loginScene);
             createError.setVisible(false);
         }
+        if (event.getSource() == BackFromViewProp) {
+            window.setScene(HomeScene);
+            viewpropRoot.getChildren().clear();
+            viewpropRoot.getChildren().add(BackFromViewProp);            
+        }
+
+        if (event.getSource() == BackFromRegister) {
+            window.setScene(HomeScene);                     
+        }
     }
 
     private void login() throws IOException {
@@ -390,16 +435,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             if(Utils.searchForString(source, combined + ",true")){
                 user = new Admin(nameInput.getText(), passInput.getText());
             } else {
-                user = new PropertyOwner(nameInput.getText(), passInput.getText());
-                int i;
-                int j = -130;
-                for(i = 0; i < ((PropertyOwner)user).getPropertyList().size(); i++){
-                    addresses.add(new Text(((PropertyOwner)user).getPropertyList().get(i).getAddress()));
-                    addresses.get(i).setTranslateX(-80);
-                    addresses.get(i).setTranslateY(j);
-                    viewpropRoot.getChildren().add(addresses.get(i));
-                    j += 30;
-                }
+                user = new PropertyOwner(nameInput.getText(), passInput.getText());                
             }            
 
         } else {
