@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -29,6 +30,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew, BackToLogin, BackFromViewProp, BackFromRegister, BackFromProp;
     GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropRoot, propRoot;
     ScrollPane viewpropPane;
+    Group viewpropGroup;
     Text createError, loginError;
     private PasswordField passInput, newpassInput;
     private TextField nameInput, OwnerIn, AddressInLine1, PostcodeIn, MarketValIn,
@@ -56,6 +58,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         confirmPane = new GridPane();
         viewpropRoot = new GridPane();
         viewpropPane = new ScrollPane();
+        viewpropPane.setPrefSize(400, 300);
+        viewpropGroup = new Group();
         propRoot = new GridPane();        
 
         // Allign
@@ -152,8 +156,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         Properties.setTranslateX(RegisterScene.getWidth() / 2 - 150);
         Properties.setTranslateY(-225);
         Properties.setScaleX(2);
-        Properties.setScaleY(2);
-        viewpropPane.setContent(viewpropRoot);
+        Properties.setScaleY(2);        
         
         BackFromViewProp = new Button("Back");
         BackFromViewProp.setTranslateX(-90);
@@ -294,6 +297,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         viewpropRoot.getChildren().add(Properties);
         viewpropRoot.getChildren().add(BackFromViewProp);
+        viewpropRoot.getChildren().add(viewpropPane);
         
         propRoot.getChildren().add(BackFromProp);
 
@@ -370,6 +374,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         if (event.getSource() == ViewProp) {
             int i;
             int j = -130;
+            
             for(i = 0; i < ((PropertyOwner)user).getPropertyList().size(); i++){
                 final int l = i;
                 addresses.add(new Text(((PropertyOwner)user).getPropertyList().get(i).getAddress()));
@@ -378,11 +383,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                 buttons.add(new Button("View"));
                 buttons.get(i).setTranslateX(160);
                 buttons.get(i).setTranslateY(j);
-                buttons.get(i).setOnAction(e -> {viewedProperty = ((PropertyOwner)user).getPropertyList().get(l); System.out.println(viewedProperty); window.setScene(propScene);});
-                viewpropRoot.getChildren().add(addresses.get(i));
-                viewpropRoot.getChildren().add(buttons.get(i));
-                j += 30;
+                buttons.get(i).setOnAction(e -> {viewedProperty = ((PropertyOwner)user).getPropertyList().get(l); System.out.println(viewedProperty); window.setScene(propScene);});                
+                j += 30;                
+                viewpropGroup.getChildren().add(addresses.get(i));
+                viewpropGroup.getChildren().add(buttons.get(i));                
             }
+            viewpropPane.setContent(viewpropGroup);
             window.setScene(ViewPropScene);
         }
         if (event.getSource() == btCreate) {
@@ -422,8 +428,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         }
         if (event.getSource() == BackFromViewProp) {
             window.setScene(HomeScene);
-            viewpropRoot.getChildren().clear();
-            viewpropRoot.getChildren().add(BackFromViewProp);            
+            viewpropGroup.getChildren().clear();
+                        
         }
 
         if (event.getSource() == BackFromProp){
@@ -436,7 +442,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     }
 
     private void login() throws IOException {
-        String combined = nameInput.getText() + "," + passInput.getText();
+        String combined = nameInput.getText() + "," + passInput.getText() + ",";
 
         if (Utils.searchForString(source, combined) && !(combined.equals("username,password,") || combined.equals(","))) {
             loginError.setVisible(false);
