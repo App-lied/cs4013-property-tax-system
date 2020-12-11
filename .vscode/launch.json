@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "CodeLens (Launch) - Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "cs4013-property-tax-system_8560060"
+        },
+        {
             "name": "Java",
             "type": "java",
             "request": "launch",
@@ -41,16 +48,51 @@
             "type": "java",
             "name": "Debug (Launch)-GUI<cs4013-property-tax-system_b823ce87>",
             "request": "launch",
+<<<<<<< HEAD
             "vmArgs": "--module-path C:/Users/sean2/Documents/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml",
+=======
+            "vmArgs": "--module-path D:/Java_JFX/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml",
+>>>>>>> ac75e18c699a66be5bf6fdbcd8b060d44645dff8
             "mainClass": "GUI",
             "projectName": "cs4013-property-tax-system_b823ce87"
         },
         {
             "type": "java",
+<<<<<<< HEAD
             "name": "Debug (Launch)-Main<cs4013-property-tax-system_b823ce87>",
             "request": "launch",
             "mainClass": "Main",
             "projectName": "cs4013-property-tax-system_b823ce87"
+=======
+            "name": "Debug (Launch)-HomeGUI<cs4013-property-tax-system_ffe3e5b8>",
+            "request": "launch",
+            "vmArgs": "--module-path D:/Java_JFX/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml",
+            "mainClass": "HomeGUI",
+            "projectName": "cs4013-property-tax-system_ffe3e5b8"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-LoginGUI<cs4013-property-tax-system_ffe3e5b8>",
+            "request": "launch",
+            "vmArgs": "--module-path D:/Java_JFX/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml",
+            "mainClass": "LoginGUI",
+            "projectName": "cs4013-property-tax-system_ffe3e5b8"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-Main<cs4013-property-tax-system_ffe3e5b8>",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "cs4013-property-tax-system_ffe3e5b8"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-RegisterProp<cs4013-property-tax-system_ffe3e5b8>",
+            "request": "launch",
+            "vmArgs": "--module-path D:/Java_JFX/javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml",
+            "mainClass": "RegisterProp",
+            "projectName": "cs4013-property-tax-system_ffe3e5b8"
+>>>>>>> ac75e18c699a66be5bf6fdbcd8b060d44645dff8
         }
     ]
 }

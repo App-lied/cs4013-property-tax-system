@@ -8,12 +8,10 @@ public class TaxCalculator {
     private static double fixedCharge;
     private static double[] locationCharges;
     private static boolean residenceCharge;
-    //private static int currentYear;
     private LinkedList<Double> taxBrackets = new LinkedList<Double>();
     private ArrayList<Double> taxRates = new ArrayList<Double>();
     private double value;
     private int category; 
-    private ArrayList<Payment> list;
 
     /**
      * The default constructor.
@@ -21,18 +19,18 @@ public class TaxCalculator {
      */
     public TaxCalculator(Property p) {
         fixedCharge = 100;
-        locationCharges = new double[]{100, 80, 60, 50};
+        locationCharges = new double[]{100, 80, 60, 50, 25};
         residenceCharge = p.isPrincipalResidence();
         value = p.getestMarketValue();
         category = p.getLocationCategory();
-        list = p.getPaymentList();
+        taxBrackets.add(0.0);
         taxBrackets.add(150000.000);
         taxBrackets.add(400001.000);
         taxBrackets.add(650001.000);
         taxRates.add(0.0);
-        taxRates.add(0.01);
-        taxRates.add(0.02);
-        taxRates.add(0.04);
+        taxRates.add(0.0001);
+        taxRates.add(0.0002);
+        taxRates.add(0.0004);
 
     }   
 
@@ -40,12 +38,18 @@ public class TaxCalculator {
      * A method to return the tax due for a payment.
      * @return The value of the tax due to be paid.
      */
-    public double getTaxPayable() {        
+    public double getTaxPayable(Payment p) {        
         double taxBeforePenalty = fixedCharge + getMarketValueTax() + getCategoryTax();
         if(residenceCharge == true){
             taxBeforePenalty += 100;   
         }
-        return taxAfterPenalty(taxBeforePenalty);        
+        return taxAfterPenalty(taxBeforePenalty, p);        
+    }
+
+    public void setBrackets(double[] a){
+        for(int i = 0; i < a.length; i++){
+            taxRates.set(i, a[i]);
+        }
     }
 
     /**
@@ -55,10 +59,14 @@ public class TaxCalculator {
     private double getMarketValueTax(){
         int i;
         double marketValueTax = 0;
-        for (i = 0; i < taxBrackets.size(); i++) {
-            if (value < taxBrackets.get(i)) {
-                marketValueTax = taxRates.get(i) * value;
-                break;
+        if(value > 650001){
+            marketValueTax = 0.0004 * value;
+        } else{
+            for (i = 0; i < taxBrackets.size(); i++) {
+                if (value < taxBrackets.get(i)) {
+                    marketValueTax = taxRates.get(i) * value;
+                    break;
+                }
             }
         }
         return marketValueTax;
@@ -72,31 +80,18 @@ public class TaxCalculator {
         return locationCharges[category];
     }
 
-    // Calculates the tax after penalty by looping through the list of payments and
-    // counting the amount of years that the owner hasn't paid tax
-    // This may be changed later if we think of a new penalty recording system
-    
     /**
      * Calculates the tax due if an overdue penalty has to be paid.
      * @param tax The original value of the due tax.
      * @return The tax after the overdue penalty is added.
      */
-    private double taxAfterPenalty(double tax){
-        int i;
-        int count = 0;
-        //This for loop counts the amount of years that tax wasn't paid in
-        for(i = 0; i < list.size(); i++){
-            if(!list.get(i).isPaid()){
-                count++;
+    private double taxAfterPenalty(double tax, Payment p){
+        if(!p.isPaid()){
+            for (int i = 0; i < 2020 - p.getYear(); i++) {
+                tax = tax + 0.07 * tax;
             }
-        }
-        // This for loop keeps adding tax in a compound manner
-        for (i = 0; i < count; i++) {
-            tax = tax + 0.07 * tax;
         }
         return tax;
     }
-
-    
     
 }

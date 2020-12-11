@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -27,9 +26,10 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             BackFromViewProp, BackFromRegister, BackFromProp, AdminLogout, ViewAllProp, PropertyStats, GetPropTaxOwner,
             OverduePropTax;
     GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropRoot, propRoot, AdminPannelPane;
-    ScrollPane viewpropPane, AdminpropScroll;
-    Group viewpropGroup, AdminpropGroup;
-    Text createError, loginError;
+    ScrollPane viewpropPane, propPane, AdminpropScroll;
+    Group viewpropGroup, paymentsGroup, AdminpropGroup;
+
+    Text createError, loginError, details;
     private PasswordField passInput, newpassInput;
     private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, NewUsername;
     private CheckBox PrincipalResIn;
@@ -38,8 +38,10 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     static File source = new File("src/lib/users/userlogin.csv");
     User user;
     private ArrayList<Text> addresses = new ArrayList<Text>();
+    private ArrayList<Text> payments = new ArrayList<Text>();
     private ArrayList<Button> buttons = new ArrayList<Button>();
     private ArrayList<Property> routeKeyArray = new ArrayList<Property>();
+    private ArrayList<Button> pay = new ArrayList<Button>();
     private Property viewedProperty;
 
     @Override
@@ -60,6 +62,13 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         viewpropGroup = new Group();
         propRoot = new GridPane();
         AdminPannelPane = new GridPane();
+        viewpropPane.setPrefSize(400, 300);
+        propRoot = new GridPane();
+        propPane = new ScrollPane();
+        propPane.setPrefSize(200, 300);
+
+        viewpropGroup = new Group();
+        paymentsGroup = new Group();
 
         // Allign
         loginPane.setAlignment(Pos.CENTER);
@@ -170,6 +179,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         BackFromProp.setTranslateY(-200);
         BackFromProp.setOnAction(this);
 
+        Text singleProperty = new Text("Property:");
+        singleProperty.setTranslateX(loginScene.getWidth() / 2 - 150);
+        singleProperty.setTranslateY(-225);
+        singleProperty.setScaleX(2);
+        singleProperty.setScaleY(2);
+
         // Label of Register Owner
         Text Register = new Text("Register a property");
         Register.setTranslateX(RegisterScene.getWidth() / 2 - 200);
@@ -217,8 +232,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         MarketValIn.setTranslateX(80);
         MarketValIn.setTranslateY(60);
 
-        String[] categories = { "City", "Large Town", "Small Town", "Village", "Countryside" };
-        LocationCatIn = new ComboBox<String>(FXCollections.observableArrayList(categories));
+        LocationCatIn = new ComboBox<String>(FXCollections.observableArrayList(locations));
         LocationCatIn.setTranslateX(80);
         LocationCatIn.setTranslateY(90);
 
@@ -354,6 +368,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         viewpropRoot.getChildren().add(viewpropPane);
 
         propRoot.getChildren().add(BackFromProp);
+        propRoot.getChildren().add(singleProperty);
+        propRoot.getChildren().add(propPane);
 
         createPane.getChildren().add(NewUsernameLabel);
         createPane.getChildren().add(NewUsername);
@@ -420,7 +436,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                 address += addressSplit[i];
             }
             if (!(OwnerIn.getText().equals("") || AddressIn.getText().equals("") || PostcodeIn.getText().equals("")
-                    || MarketValIn.getText().equals(""))) {
+                    || MarketValIn.getText().equals("") || !Utils.containsOnlyNumbers(MarketValIn.getText()))) {
 
                 if (user instanceof PropertyOwner) {
                     ((PropertyOwner) user).getPropertyList()
@@ -430,6 +446,13 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                     ((PropertyOwner) user).getPropertyList().get(((PropertyOwner) user).getPropertyList().size() - 1)
                             .writeToFile(user.getUsername());
                 }
+
+                OwnerIn.clear();
+                AddressIn.clear();
+                PostcodeIn.clear();
+                MarketValIn.clear();
+                LocationCatIn.valueProperty().set(null);
+
                 window.setScene(ConfirmScene);
             }
         }
@@ -450,8 +473,24 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                 buttons.get(i).setTranslateY(j);
                 buttons.get(i).setOnAction(e -> {
                     viewedProperty = ((PropertyOwner) user).getPropertyList().get(l);
+                    details = new Text(viewedProperty.toString());
+                    details.setTranslateX(loginScene.getWidth() / 2 - 250);
+                    details.setTranslateY(-75);
+                    details.setScaleX(1.25);
+                    details.setScaleY(1.25);
+                    propRoot.getChildren().add(details);
                     System.out.println(viewedProperty);
                     window.setScene(propScene);
+                    int k;
+                    for (k = 0; k < payments.size(); k++) {
+                        payments.add(new Text(
+                                ((PropertyOwner) user).getPropertyList().get(l).getPaymentList().get(l).toString()));
+                        payments.get(k).setTranslateX(250);
+                        payments.get(k).setTranslateY(-130);
+                        paymentsGroup.getChildren().add(payments.get(k));
+
+                    }
+                    propPane.setContent(paymentsGroup);
                 });
                 j += 30;
                 viewpropGroup.getChildren().add(addresses.get(i));
