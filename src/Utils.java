@@ -54,4 +54,20 @@ public class Utils {
 
         return null;
     }
+    /**
+     * A method to check if a given string contains only digits.
+     * @param s The string to be checked.
+     * @return Whether or not the string contains only numbers.
+     */
+    public static boolean containsOnlyNumbers(String s){
+        int i;        
+        for(i = 0; i < s.length(); i++){
+            if (!(s.charAt(i) >= '0'
+                && s.charAt(i) <= '9')) { 
+                return false;
+            } 
+            
+        } 
+        return true;      
+    }
 }

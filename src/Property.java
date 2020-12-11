@@ -115,7 +115,8 @@ public class Property {
      * @return A string representation of the property.
      */
     public String toString() {
-        return getOwner() + "\n" + getAddress() + "\n" + postcode
+        return  "Owner: " + getOwner() + "\n" + "Address: " + getAddress() + "\n"
+                + "Postcode: " + postcode
                 + "\nEstimated Market Value: €" + getestMarketValue()
                 + "\nLocation Category: " + getPropertyLocation() + "\n";
     }
