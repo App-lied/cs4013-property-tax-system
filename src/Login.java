@@ -58,12 +58,13 @@ public class Login {
     
         //check if both the combined string exists, and check that it does not equal the first row in the csv that lays out the columns
         if(Utils.searchForString(source, combined) && !(combined.equals("username,password,"))){
-            System.out.println("\nLogin Successful");
+            System.out.println("\nLogin Successful\n");
 
             //declare a new User object, then cast it depending on if it's noted as an admin or not in the file
             User loggedIn;
 
-            if(Utils.searchForString(source, combined + ",true")){
+            
+            if(Utils.searchForString(source, combined + "true")){
                 loggedIn = new Admin(enteredName, enteredPassword);
             } else {
                 loggedIn = new PropertyOwner(enteredName, enteredPassword);
@@ -103,4 +104,3 @@ public class Login {
         }
     }
 }
-

@@ -1,6 +1,8 @@
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.io.File;
+import java.util.ArrayList;
+import java.io.IOException;
 /**
  * A utility class for static methods used throughout the system.
  */
@@ -28,6 +30,30 @@ public class Utils {
         return false;
     }
 
+    public static ArrayList<Payment> findPaymentsByRoutingKey(String key){
+        String filename = "src/lib/properties/payment_info.csv";
+        ArrayList<Payment> result = new ArrayList<Payment>();
+
+        try {
+            final Scanner scanner = new Scanner(new File(filename));
+
+            while(scanner.hasNextLine()){
+                final String lineFromFile = scanner.nextLine();
+
+                if(lineFromFile.contains(key) && !lineFromFile.contains("year")){
+                    String[] s = lineFromFile.split(",");
+                    result.add(new Payment(Integer.parseInt(s[0]), Double.parseDouble(s[1]),
+                    (s[2].equals("true") ? true : false)));
+                }
+            }
+
+            return result;
+        } catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
     /**
      * A method to check if a given string contains only digits.
      * @param s The string to be checked.
@@ -43,6 +69,5 @@ public class Utils {
             
         } 
         return true;      
-       
     }
 }
