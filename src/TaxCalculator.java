@@ -23,13 +23,14 @@ public class TaxCalculator {
         residenceCharge = p.isPrincipalResidence();
         value = p.getestMarketValue();
         category = p.getLocationCategory();
+        taxBrackets.add(0.0);
         taxBrackets.add(150000.000);
         taxBrackets.add(400001.000);
         taxBrackets.add(650001.000);
         taxRates.add(0.0);
-        taxRates.add(0.01);
-        taxRates.add(0.02);
-        taxRates.add(0.04);
+        taxRates.add(0.0001);
+        taxRates.add(0.0002);
+        taxRates.add(0.0004);
 
     }   
 
@@ -45,6 +46,12 @@ public class TaxCalculator {
         return taxAfterPenalty(taxBeforePenalty, p);        
     }
 
+    public void setBrackets(double[] a){
+        for(int i = 0; i < a.length; i++){
+            taxRates.set(i, a[i]);
+        }
+    }
+
     /**
      * 
      * @return The value of tax applied based on the property's est. market value.
@@ -52,10 +59,14 @@ public class TaxCalculator {
     private double getMarketValueTax(){
         int i;
         double marketValueTax = 0;
-        for (i = 0; i < taxBrackets.size(); i++) {
-            if (value < taxBrackets.get(i)) {
-                marketValueTax = taxRates.get(i) * value;
-                break;
+        if(value > 650001){
+            marketValueTax = 0.0004 * value;
+        } else{
+            for (i = 0; i < taxBrackets.size(); i++) {
+                if (value < taxBrackets.get(i)) {
+                    marketValueTax = taxRates.get(i) * value;
+                    break;
+                }
             }
         }
         return marketValueTax;

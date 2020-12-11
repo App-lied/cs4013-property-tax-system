@@ -114,7 +114,6 @@ public class Payment implements Comparable<Payment>{
             sb.append("\n");
             writer.write(sb.toString());
             writer.close();
-            System.out.println("Payment added successfully.");
             
         } catch(IOException e) {
             System.out.println(e.getMessage());

@@ -2,6 +2,7 @@ import java.util.Scanner;
 //import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A class to handle the main interface of the system's terminal implementation.
@@ -40,7 +41,8 @@ public class MainSystem {
         boolean running = true;
 
         while(running){
-            System.out.println("Press 'V' to view users.\nPress 'O' to view overdue payments.\nPress 'S' to view statistics.\nPress 'Q' to exit.");
+            System.out.println("Press 'V' to view users.\nPress 'O' to view overdue payments.\nPress 'S' to view statistics.\n"+
+            "Press 'R' to investigate changes to tax rates.\nPress 'Q' to exit.");
             String choice = in.nextLine().toLowerCase();
 
             if(choice.equals("v")){
@@ -49,6 +51,8 @@ public class MainSystem {
                 overduePayments();
             } else if(choice.equals("s")){
                 displayStatistics();;
+            } else if(choice.equals("r")){
+                investigateRateChanges(user);
             } else if (choice.equals("q")){
                 System.out.println("System exiting.");
                 running = false;
@@ -203,7 +207,7 @@ public class MainSystem {
 
     }
 
-    private void overduePayments(){
+    private void overduePayments() throws IOException{
         boolean running = true;
         System.out.println("Enter the year to search overdue payments for.");
         
@@ -257,7 +261,7 @@ public class MainSystem {
     /**
      * A private method for a logged-in admin to view statistics based on a routing key.
      */
-    private void displayStatistics(){
+    private void displayStatistics() throws IOException{
         boolean running = true;
         String key = "";
         while(running){
@@ -312,6 +316,48 @@ public class MainSystem {
                 running = false;
             }
         }
+    }
+
+    /**
+     * A method that allows the admin to change the rates used in the calculator and investigate the effects it has.
+     * @param user The currently logged-in admin.
+     */
+    private void investigateRateChanges(User user){
+        double[] rates = {0.0, 0.01, 0.02, 0.04};
+        boolean running = true;
+        while(running){
+            System.out.println("Press 'B' to edit tax rate by value bracket.\nPress 'N' when you are ready to proceed.");
+            String choice = in.nextLine().toLowerCase();
+            if(choice.equals("b")){
+                System.out.println("Enter the rate in % for the 150,000 - 400,000 bracket: ");
+                rates[1] = Double.parseDouble(in.nextLine()) / 100;
+                System.out.println("Enter the rate in % for the 400,000 - 650,000 bracket: ");
+                rates[2] = Double.parseDouble(in.nextLine()) / 100;
+                System.out.println("Enter the rate in % for the 650,000+ bracket: ");
+                rates[3] = Double.parseDouble(in.nextLine()) / 100;
+            } else if(choice.equals("n")){
+                running = false;
+            }
+        }
+        ArrayList<Payment> newPaymentData = new ArrayList<Payment>();
+        for(User u : ((Admin)user).getUsers()){
+            for(Property p : ((PropertyOwner)u).getPropertyList()){
+                TaxCalculator calculator = new TaxCalculator(p);
+                calculator.setBrackets(rates);
+                Payment pay = new Payment(2020, 0, false);
+                pay.setAmount(calculator.getTaxPayable(pay));
+                newPaymentData.add(pay);
+            }
+        }
+
+        Collections.sort(newPaymentData);
+        double total = 0;
+        for(Payment p : newPaymentData){
+            total = total + p.getAmount();
+        }
+        System.out.println("Total tax to be collected with these rates: €" + total);
+        System.out.println("Mean tax payment: €" + (total / newPaymentData.size()));
+        System.out.println("Median tax payment: €" + newPaymentData.get(newPaymentData.size() / 2).getAmount() + "\n");
     }
 
     /**
