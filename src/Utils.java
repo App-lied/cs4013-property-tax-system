@@ -70,4 +70,14 @@ public class Utils {
         } 
         return true;      
     }
+
+    /**
+     * A method to replace all "\n" with 10 spaces
+     * @param s The string to be converted.
+     * @return The converted string without line breakers.
+     */
+    public static String removeLineBreakers(String s){
+        s = s.replaceAll("\n", "          ");
+        return s;
+    }
 }

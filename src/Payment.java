@@ -62,7 +62,7 @@ public class Payment implements Comparable<Payment>{
      * @return The payment in a String representation.
      */
     public String toString(){
-        return year + "\n€" + amount + "\n" + (paid == true ? "Paid" : "Not paid") + "\n";
+        return year + "\n€" + String.format("%.2f", amount) + "\n" + (paid == true ? "Paid" : "Not paid") + "\n";
     }
 
     public int compareTo(Payment p){

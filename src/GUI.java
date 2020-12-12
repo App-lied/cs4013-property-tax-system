@@ -65,7 +65,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         viewpropPane.setPrefSize(400, 300);
         propRoot = new GridPane();
         propPane = new ScrollPane();
-        propPane.setPrefSize(200, 300);
+        propPane.setPrefSize(400, 100);
 
         viewpropGroup = new Group();
         paymentsGroup = new Group();
@@ -175,15 +175,19 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         // Property:
         BackFromProp = new Button("Back");
-        BackFromProp.setTranslateX(-90);
+        BackFromProp.setTranslateX(0);
         BackFromProp.setTranslateY(-200);
         BackFromProp.setOnAction(this);
 
         Text singleProperty = new Text("Property:");
-        singleProperty.setTranslateX(loginScene.getWidth() / 2 - 150);
+        singleProperty.setTranslateX(loginScene.getWidth() / 2 - 50);
         singleProperty.setTranslateY(-225);
         singleProperty.setScaleX(2);
         singleProperty.setScaleY(2);
+
+        details = new Text();
+
+        propPane.setTranslateY(100);
 
         // Label of Register Owner
         Text Register = new Text("Register a property");
@@ -473,22 +477,48 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                 buttons.get(i).setTranslateY(j);
                 buttons.get(i).setOnAction(e -> {
                     viewedProperty = ((PropertyOwner) user).getPropertyList().get(l);
-                    details = new Text(viewedProperty.toString());
-                    details.setTranslateX(loginScene.getWidth() / 2 - 250);
+                    details.setText((viewedProperty.toString()));
+                    details.setTranslateX(loginScene.getWidth() / 2 - 170);
                     details.setTranslateY(-75);
                     details.setScaleX(1.25);
                     details.setScaleY(1.25);
                     propRoot.getChildren().add(details);
                     System.out.println(viewedProperty);
                     window.setScene(propScene);
-                    int k;
-                    for (k = 0; k < payments.size(); k++) {
-                        payments.add(new Text(
-                                ((PropertyOwner) user).getPropertyList().get(l).getPaymentList().get(l).toString()));
-                        payments.get(k).setTranslateX(250);
-                        payments.get(k).setTranslateY(-130);
-                        paymentsGroup.getChildren().add(payments.get(k));
-
+                    int k, n = 0;
+                    int o = 100;                    
+                    for (k = 0; k < viewedProperty.getPaymentList().size(); k++) {
+                        final int m = k;
+                        payments.add(new Text(Utils.removeLineBreakers(viewedProperty.getPaymentList().get(k).toString())));
+                        payments.get(k).setTranslateX(loginScene.getWidth() / 2 - 50);
+                        payments.get(k).setTranslateY(o);
+                        if(!viewedProperty.getPaymentList().get(k).isPaid()){
+                            pay.add(new Button("Pay"));                            
+                            pay.get(k).setTranslateX(loginScene.getWidth() / 2 + 280);
+                            pay.get(k).setTranslateY(o - 15);
+                            pay.get(k).setOnAction(f -> {
+                                int y = viewedProperty.getPaymentList().get(m).getYear();
+                                double a = viewedProperty.getPaymentList().get(m).getAmount();
+                                Payment temp = new Payment(y, a, true);
+                                viewedProperty.getPaymentList().get(m).setPaid(true);
+                                payments.get(m).setText(Utils.removeLineBreakers(viewedProperty.getPaymentList().get(m).toString()));
+                                paymentsGroup.getChildren().remove(m);
+                                try {
+                                    viewedProperty.getPaymentList().get(m).removePayment(viewedProperty.getPostcode());
+                                } catch (IOException e1) {                                    
+                                    e1.printStackTrace();
+                                }
+                                viewedProperty.getPaymentList().remove(viewedProperty.getPaymentList().get(m));
+                                temp.writeToFile(viewedProperty.getPostcode());
+                                viewedProperty.getPaymentList().add(temp);                                
+                            });
+                        paymentsGroup.getChildren().add(pay.get(k));
+                        }
+                        else{
+                            pay.add(null);
+                        }
+                        paymentsGroup.getChildren().add(payments.get(k));                        
+                        o += 30;
                     }
                     propPane.setContent(paymentsGroup);
                 });
@@ -551,6 +581,10 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         if (event.getSource() == BackFromProp) {
             window.setScene(ViewPropScene);
+            propRoot.getChildren().remove(details);
+            payments.clear();
+            pay.clear();
+            paymentsGroup.getChildren().clear();
         }
 
         if (event.getSource() == BackFromRegister) {
