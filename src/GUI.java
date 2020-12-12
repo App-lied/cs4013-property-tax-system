@@ -21,17 +21,18 @@ import javafx.geometry.Pos;
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
     Scene loginScene, HomeScene, CreateScene, RegisterScene, ConfirmScene, ViewPropScene, propScene, AdminPannelScene,
-            adminPropScene;
+            AdminUsersScene, AdminOverPropScene;
     Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew, BackToLogin,
-            BackFromViewProp, BackFromRegister, BackFromProp, AdminLogout, ViewAllProp, PropertyStats, GetPropTaxOwner,
-            OverduePropTax;
-    GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropRoot, propRoot, AdminPannelPane;
-    ScrollPane viewpropPane, propPane, AdminpropScroll;
-    Group viewpropGroup, paymentsGroup, AdminpropGroup;
+            BackFromViewProp, BackFromRegister, BackFromProp, AdminLogout, ViewUsers, PropertyStats, GetPropTaxOwner,
+            OverduePropTax, Search;
+    GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropRoot, propRoot, AdminPannelPane,
+            AdminOverPropPane;
+    ScrollPane viewpropPane, propPane, AdminUsersPane;
+    Group viewpropGroup, paymentsGroup, AdminUsersGroup;
 
     Text createError, loginError, details;
     private PasswordField passInput, newpassInput;
-    private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, NewUsername;
+    private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, NewUsername, year, areaCodeText;
     private CheckBox PrincipalResIn;
     private ComboBox<String> LocationCatIn;
     private static String[] locations = { "Countryside", "Village", "Small Town", "Large Town", "City" };
@@ -40,9 +41,11 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     private ArrayList<Text> addresses = new ArrayList<Text>();
     private ArrayList<Text> payments = new ArrayList<Text>();
     private ArrayList<Button> buttons = new ArrayList<Button>();
-    private ArrayList<Property> routeKeyArray = new ArrayList<Property>();
     private ArrayList<Button> pay = new ArrayList<Button>();
     private Property viewedProperty;
+    Admin admin;
+    private ArrayList<Text> userlist = new ArrayList<Text>();
+    private ArrayList<Button> viewUser = new ArrayList<Button>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -57,6 +60,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         registerPane = new GridPane();
         confirmPane = new GridPane();
         viewpropRoot = new GridPane();
+        AdminUsersPane = new ScrollPane();
+        AdminOverPropPane = new GridPane();
         viewpropPane = new ScrollPane();
         viewpropPane.setPrefSize(400, 300);
         viewpropGroup = new Group();
@@ -79,6 +84,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         viewpropRoot.setAlignment(Pos.CENTER);
         propRoot.setAlignment(Pos.CENTER);
         AdminPannelPane.setAlignment(Pos.CENTER);
+        AdminOverPropPane.setAlignment(Pos.CENTER);
 
         CreateScene = new Scene(createPane, 420, 500);
         loginScene = new Scene(loginPane, 420, 500);
@@ -88,6 +94,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         ViewPropScene = new Scene(viewpropRoot, 420, 500);
         propScene = new Scene(propRoot, 420, 500);
         AdminPannelScene = new Scene(AdminPannelPane, 420, 500);
+        AdminUsersScene = new Scene(AdminUsersPane, 420, 500);
+        AdminOverPropScene = new Scene(AdminOverPropPane, 420, 500);
 
         // Login heading
         Text loginHeading = new Text("Login");
@@ -328,13 +336,13 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         AdminLogout.setOnAction(this);
 
         // Property buttons for admin
-        ViewAllProp = new Button();
-        ViewAllProp.setText("Property tax on a single Property");
-        ViewAllProp.setTranslateY(-100);
-        GridPane.setHalignment(ViewAllProp, HPos.CENTER);
-        ViewAllProp.setScaleX(1.25);
-        ViewAllProp.setScaleY(1.25);
-        ViewAllProp.setOnAction(this);
+        ViewUsers = new Button();
+        ViewUsers.setText("View Users");
+        ViewUsers.setTranslateY(-100);
+        GridPane.setHalignment(ViewUsers, HPos.CENTER);
+        ViewUsers.setScaleX(1.25);
+        ViewUsers.setScaleY(1.25);
+        ViewUsers.setOnAction(this);
 
         GetPropTaxOwner = new Button();
         GetPropTaxOwner.setText("Property tax on a Owner");
@@ -360,9 +368,44 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         PropertyStats.setScaleY(1.25);
         PropertyStats.setOnAction(this);
 
+        // Admin Overdue prop tax
+
+        Text EnterDetails = new Text("Enter details below");
+        GridPane.setHalignment(EnterDetails, HPos.CENTER);
+        EnterDetails.setTranslateY(-125);
+        EnterDetails.setScaleX(2);
+        EnterDetails.setScaleY(2);
+
+        Label EnterYear = new Label("Enter year:");
+        EnterYear.setTranslateX(10);
+
+        year = new TextField();
+        year.setTranslateX(70);
+
+        Label areaCode = new Label("(Optional) Search by area code:");
+        areaCode.setTranslateX(-100);
+        areaCode.setTranslateY(30);
+
+        areaCodeText = new TextField();
+        areaCodeText.setTranslateX(70);
+        areaCodeText.setTranslateY(30);
+
+        Search = new Button();
+        Search.setText("Search");
+        Search.setTranslateX(50);
+        Search.setTranslateY(140);
+        Search.setOnAction(this);
+
+        AdminOverPropPane.getChildren().add(EnterYear);
+        AdminOverPropPane.getChildren().add(year);
+        AdminOverPropPane.getChildren().add(areaCode);
+        AdminOverPropPane.getChildren().add(areaCodeText);
+        AdminOverPropPane.getChildren().add(EnterDetails);
+        AdminOverPropPane.getChildren().add(Search);
+
         AdminPannelPane.getChildren().add(AdminPannelText);
         AdminPannelPane.getChildren().add(AdminLogout);
-        AdminPannelPane.getChildren().add(ViewAllProp);
+        AdminPannelPane.getChildren().add(ViewUsers);
         AdminPannelPane.getChildren().add(GetPropTaxOwner);
         AdminPannelPane.getChildren().add(OverduePropTax);
         AdminPannelPane.getChildren().add(PropertyStats);
@@ -486,14 +529,15 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                     System.out.println(viewedProperty);
                     window.setScene(propScene);
                     int k, n = 0;
-                    int o = 100;                    
+                    int o = 100;
                     for (k = 0; k < viewedProperty.getPaymentList().size(); k++) {
                         final int m = k;
-                        payments.add(new Text(Utils.removeLineBreakers(viewedProperty.getPaymentList().get(k).toString())));
+                        payments.add(
+                                new Text(Utils.removeLineBreakers(viewedProperty.getPaymentList().get(k).toString())));
                         payments.get(k).setTranslateX(loginScene.getWidth() / 2 - 50);
                         payments.get(k).setTranslateY(o);
-                        if(!viewedProperty.getPaymentList().get(k).isPaid()){
-                            pay.add(new Button("Pay"));                            
+                        if (!viewedProperty.getPaymentList().get(k).isPaid()) {
+                            pay.add(new Button("Pay"));
                             pay.get(k).setTranslateX(loginScene.getWidth() / 2 + 280);
                             pay.get(k).setTranslateY(o - 15);
                             pay.get(k).setOnAction(f -> {
@@ -501,23 +545,23 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                                 double a = viewedProperty.getPaymentList().get(m).getAmount();
                                 Payment temp = new Payment(y, a, true);
                                 viewedProperty.getPaymentList().get(m).setPaid(true);
-                                payments.get(m).setText(Utils.removeLineBreakers(viewedProperty.getPaymentList().get(m).toString()));
+                                payments.get(m).setText(
+                                        Utils.removeLineBreakers(viewedProperty.getPaymentList().get(m).toString()));
                                 paymentsGroup.getChildren().remove(m);
                                 try {
                                     viewedProperty.getPaymentList().get(m).removePayment(viewedProperty.getPostcode());
-                                } catch (IOException e1) {                                    
+                                } catch (IOException e1) {
                                     e1.printStackTrace();
                                 }
                                 viewedProperty.getPaymentList().remove(viewedProperty.getPaymentList().get(m));
                                 temp.writeToFile(viewedProperty.getPostcode());
-                                viewedProperty.getPaymentList().add(temp);                                
+                                viewedProperty.getPaymentList().add(temp);
                             });
-                        paymentsGroup.getChildren().add(pay.get(k));
-                        }
-                        else{
+                            paymentsGroup.getChildren().add(pay.get(k));
+                        } else {
                             pay.add(null);
                         }
-                        paymentsGroup.getChildren().add(payments.get(k));                        
+                        paymentsGroup.getChildren().add(payments.get(k));
                         o += 30;
                     }
                     propPane.setContent(paymentsGroup);
@@ -530,12 +574,34 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             window.setScene(ViewPropScene);
         }
 
-        if (event.getSource() == ViewAllProp) {
-            // for( int i = 0; i< ((Property))
+        if (event.getSource() == ViewUsers) {
+            int i;
+            int j = -130;
+            for (i = 0; i < ((Admin) user).getUsers().size(); i++) {
+                int l = i;
+                userlist.add(new Text(((Admin) admin).getUsers().get(i).getUsername()));
+                userlist.get(i).setTranslateX(-80);
+                userlist.get(i).setTranslateY(j + 15);
+                viewUser.add(new Button("View"));
+                viewUser.get(i).setTranslateX(250);
+                viewUser.get(i).setTranslateY(j);
+                viewUser.get(i).setOnAction(e -> {
 
-            // String routeKey = ((Property) routeKeyArray).getPostcode().substring(0, 3);
-
+                });
+                AdminUsersGroup.getChildren().add(userlist.get(i));
+                AdminUsersGroup.getChildren().add(viewUser.get(i));
+            }
+            AdminUsersPane.setContent(AdminUsersGroup);
+            window.setScene(AdminUsersScene);
         }
+
+        if (event.getSource() == OverduePropTax) {
+            window.setScene(AdminOverPropScene);
+        }
+
+        /*
+         * if (event.getSource() == Search){ for(int i = 0; i < ) }
+         */
 
         if (event.getSource() == btCreate) {
             window.setScene(CreateScene);
@@ -625,6 +691,5 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
     public static void main(String[] args) {
         launch(args);
-
     }
 }

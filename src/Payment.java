@@ -50,10 +50,18 @@ public class Payment implements Comparable<Payment>{
         return amount;
     }
 
+    /**
+     * 
+     * @param b Whether paid should be set to true or false.
+     */
     public void setPaid(boolean b){
         this.paid = b;
     }
 
+    /**
+     * 
+     * @param a The value amount should be set to.
+     */
     public void setAmount(double a){
         this.amount = a;
     }
@@ -65,6 +73,11 @@ public class Payment implements Comparable<Payment>{
         return year + "\n€" + String.format("%.2f", amount) + "\n" + (paid == true ? "Paid" : "Not paid") + "\n";
     }
 
+    /**
+     * Inherited method to compare two Payment objects.
+     * @param p The payment to compare to.
+     * @return The int indicating the result of the comparison.
+     */
     public int compareTo(Payment p){
         if(this.year > p.year){
             return 1;

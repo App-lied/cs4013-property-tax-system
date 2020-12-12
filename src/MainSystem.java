@@ -105,6 +105,7 @@ public class MainSystem {
         String input = "";
         if(in.hasNextInt()){
             choice = in.nextInt() - 1;
+            in.nextLine();
         } else {
             input = in.nextLine().toLowerCase();
         }
@@ -139,6 +140,7 @@ public class MainSystem {
         String input = "";
         if(in.hasNextInt()){
             choice = in.nextInt() - 1;
+            in.nextLine();
         } else {
             input = in.nextLine().toLowerCase();
         }
@@ -177,6 +179,7 @@ public class MainSystem {
         String input = "";
         if(in.hasNextInt()){
             choice = in.nextInt() - 1;
+            in.nextLine();
         } else {
             input = in.nextLine().toLowerCase();
         }
@@ -201,12 +204,17 @@ public class MainSystem {
 
                     temp.writeToFile(p.getPostcode());
                     p.getPaymentList().add(temp);
+                    System.out.println("Payment made successfully.");
                 }
             }
         }
 
     }
 
+    /**
+     * A method for the logged in admin to view details on overdue payments.
+     * @throws IOException
+     */
     private void overduePayments() throws IOException{
         boolean running = true;
         System.out.println("Enter the year to search overdue payments for.");
@@ -216,6 +224,7 @@ public class MainSystem {
         int year = -1;
         if(in.hasNextInt()){
             year = in.nextInt();
+            in.nextLine();
         } else {
             input = in.nextLine().toLowerCase();
         }
@@ -260,6 +269,7 @@ public class MainSystem {
 
     /**
      * A private method for a logged-in admin to view statistics based on a routing key.
+     * @throws IOException
      */
     private void displayStatistics() throws IOException{
         boolean running = true;
@@ -321,8 +331,9 @@ public class MainSystem {
     /**
      * A method that allows the admin to change the rates used in the calculator and investigate the effects it has.
      * @param user The currently logged-in admin.
+     * @throws IOException
      */
-    private void investigateRateChanges(User user){
+    private void investigateRateChanges(User user) throws IOException{
         double[] rates = {0.0, 0.01, 0.02, 0.04};
         boolean running = true;
         while(running){
@@ -330,11 +341,23 @@ public class MainSystem {
             String choice = in.nextLine().toLowerCase();
             if(choice.equals("b")){
                 System.out.println("Enter the rate in % for the 150,000 - 400,000 bracket: ");
-                rates[1] = Double.parseDouble(in.nextLine()) / 100;
+                while(!in.hasNextDouble()){
+                    in.next();
+                }
+                rates[1] = in.nextDouble() / 100;
+                in.nextLine();
                 System.out.println("Enter the rate in % for the 400,000 - 650,000 bracket: ");
-                rates[2] = Double.parseDouble(in.nextLine()) / 100;
+                while(!in.hasNextDouble()){
+                    in.next();
+                }
+                rates[2] = in.nextDouble() / 100;
+                in.nextLine();
                 System.out.println("Enter the rate in % for the 650,000+ bracket: ");
-                rates[3] = Double.parseDouble(in.nextLine()) / 100;
+                while(!in.hasNextDouble()){
+                    in.next();
+                }
+                rates[3] = in.nextDouble() / 100;
+                in.nextLine();
             } else if(choice.equals("n")){
                 running = false;
             }
@@ -377,12 +400,20 @@ public class MainSystem {
         System.out.print("\nEnter County: ");
         answers[1] = answers[1] + " " + in.nextLine();
         System.out.print("\nEnter the property's eircode: ");
-        answers[2] = in.nextLine();
+        answers[2] = in.nextLine().toUpperCase();
         System.out.print("\nEnter the property's estimated market value: ");
-        answers[3] = in.nextLine();
+        while(!in.hasNextDouble()){
+            in.next();
+        }
+        answers[3] = Double.toString(in.nextDouble());
+        in.nextLine();
         System.out.print("\nEnter the property's location " +
         "\n(0 for countryside, 1 for village, 2 for small town, 3 for large town, 4 for city):\n ");
+        while(!in.hasNextInt()){
+            in.next();
+        }
         answers[4] = Integer.toString(in.nextInt());
+        in.nextLine();
         System.out.print("Is this your principal private residence? y/n: ");
         answers[5] = in.nextLine();
 
@@ -402,7 +433,6 @@ public class MainSystem {
         Double.parseDouble(answers[3]), Integer.parseInt(answers[4]), (answers[5].equals("yes") ? true : false));
 
         ((PropertyOwner) user).getPropertyList().add(newProperty);
-        newProperty.createPaymentHistory();
         newProperty.writeToFile(user.getUsername());
         runPropertyOwner(user);
     }
