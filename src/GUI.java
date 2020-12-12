@@ -74,6 +74,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         viewpropGroup = new Group();
         paymentsGroup = new Group();
+        AdminUsersGroup = new Group();
 
         // Allign
         loginPane.setAlignment(Pos.CENTER);
@@ -579,7 +580,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             int j = -130;
             for (i = 0; i < ((Admin) user).getUsers().size(); i++) {
                 int l = i;
-                userlist.add(new Text(((Admin) admin).getUsers().get(i).getUsername()));
+                userlist.add(new Text(((Admin) user).getUsers().get(i).getUsername()));
                 userlist.get(i).setTranslateX(-80);
                 userlist.get(i).setTranslateY(j + 15);
                 viewUser.add(new Button("View"));
