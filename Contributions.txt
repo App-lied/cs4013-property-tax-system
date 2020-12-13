@@ -1,0 +1,47 @@
+Contributions
+Design
+CRC - Patrick McCarthy and Andrei Smirnou
+UML Diagram - Alan Phillips and Sean O’Neill
+
+
+Documentation
+Javadoc comments were written by each member for their own classes and methods as they were written.
+
+Implementation
+Sean O’Neill (19240066)
+GUI
+Home scene
+Register a Property Scene
+Layout of view a property Scene
+Create New Account scene
+Admin Panel Scene
+Worked on View Users(With Andrei)
+Overdue Property Tax Scene
+Testing
+
+Andrei Smirnou (19269609)
+GUI
+Login Scene
+Create New Account scene
+Register a Property Scene
+View Property and Payments Scenes
+Investigate Changes to Tax Rates
+Property Statistics
+Worked on View Users(With Sean)
+Utils
+Testing
+
+Alan Phillips (19262922)
+MainSystem(CLI)
+Login Class
+User Class
+PropertyOwner Class
+Admin Class
+Utils Class
+Testing
+
+Patrick McCarthy (19237405)
+Property
+TaxCalculator
+Payment
+Testing

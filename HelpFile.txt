@@ -1,0 +1,12 @@
+Git-Hub Link:
+https://github.com/App-lied/cs4013-property-tax-system
+To Run the CLI:
+ls into the directory then:
+compile using: javac Main.java
+run using: java Main
+
+If you have javafx library files follow the steps below:
+To run the GUI:
+ls into the directory then:
+compile using: javac GUI.java
+run using: java GUI
