@@ -23,21 +23,22 @@ import javafx.geometry.Pos;
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
     Scene loginScene, HomeScene, CreateScene, RegisterScene, ConfirmScene, ViewPropScene, propScene, AdminPannelScene,
-            AdminUsersScene, AdminOverPropScene, AdminStatsScene, AdminInvestigateChangeScene, AdminPropScene, AdminViewPropScene, adminOverdueScene;
+            AdminUsersScene, AdminOverPropScene, AdminStatsScene, AdminInvestigateChangeScene, AdminPropScene,
+            AdminViewPropScene, adminOverdueScene;
     Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew, BackToLogin,
             BackFromViewProp, BackFromRegister, BackFromProp, AdminLogout, ViewUsers, PropertyStats, GetPropTaxOwner,
             OverduePropTax, Search, getStats, BackFromStats, investigateChanges, calculateChange, backFromChanges,
-            backOverdue;
+            backOverdue, backOverdue1;
     GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropRoot, propRoot, AdminPannelPane,
-            AdminOverPropPane, AdminStatsPane, AdminInvestigateChangePane;
+            AdminOverPropPane, AdminStatsPane, AdminInvestigateChangePane, AdminOverdueGridPane;
     ScrollPane viewpropPane, propPane, AdminUsersPane, AdminPropPane, AdminViewPropPane, adminOverduePane;
-    Group viewpropGroup, paymentsGroup, AdminUsersGroup, AdminPropGroup, AdminOverdueGroup;       
-    
+    Group viewpropGroup, paymentsGroup, AdminUsersGroup, AdminPropGroup, AdminOverdueGroup;
+
     Text createError, loginError, details, statistics, routingKeyError, change;
     Label routingKey, bracket1, bracket2, bracket3;
     private PasswordField passInput, newpassInput;
-    private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, NewUsername, year, areaCodeText, routingKeyText, bracket1Text,
-    bracket2Text, bracket3Text;
+    private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, NewUsername, year, areaCodeText,
+            routingKeyText, bracket1Text, bracket2Text, bracket3Text;
     private CheckBox PrincipalResIn;
     private ComboBox<String> LocationCatIn;
     private static String[] locations = { "Countryside", "Village", "Small Town", "Large Town", "City" };
@@ -55,7 +56,6 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     private ArrayList<Button> viewUser = new ArrayList<Button>();
     private ArrayList<Payment> routedPayments;
     Payment p;
-     
 
     @Override
     public void start(Stage primaryStage) {
@@ -79,13 +79,14 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         viewpropGroup = new Group();
         propRoot = new GridPane();
         AdminPannelPane = new GridPane();
-        viewpropPane.setPrefSize(400, 300);
         propRoot = new GridPane();
         propPane = new ScrollPane();
         propPane.setPrefSize(400, 100);
         AdminPropPane = new ScrollPane();
         AdminViewPropPane = new ScrollPane();
         adminOverduePane = new ScrollPane();
+        AdminOverdueGridPane = new GridPane();
+        adminOverduePane.setPrefSize(400, 300);
 
         viewpropGroup = new Group();
         paymentsGroup = new Group();
@@ -105,6 +106,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         AdminOverPropPane.setAlignment(Pos.CENTER);
         AdminStatsPane.setAlignment(Pos.CENTER);
         AdminInvestigateChangePane.setAlignment(Pos.CENTER);
+        AdminOverdueGridPane.setAlignment(Pos.CENTER);
 
         CreateScene = new Scene(createPane, 420, 500);
         loginScene = new Scene(loginPane, 420, 500);
@@ -120,7 +122,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         AdminInvestigateChangeScene = new Scene(AdminInvestigateChangePane, 420, 500);
         AdminPropScene = new Scene(AdminPropPane, 420, 500);
         AdminViewPropScene = new Scene(AdminViewPropPane, 420, 500);
-        adminOverdueScene = new Scene(adminOverduePane, 420, 500);
+        adminOverdueScene = new Scene(AdminOverdueGridPane, 420, 500);
 
         // Login heading
         Text loginHeading = new Text("Login");
@@ -399,7 +401,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         GridPane.setHalignment(PropertyStats, HPos.CENTER);
         PropertyStats.setScaleX(1.25);
         PropertyStats.setScaleY(1.25);
-        PropertyStats.setOnAction(this);                
+        PropertyStats.setOnAction(this);
 
         // Admin Overdue prop tax
 
@@ -444,7 +446,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         bracket2Text = new TextField();
         bracket2Text.setTranslateX(140);
-        bracket2Text.setTranslateY(-70);        
+        bracket2Text.setTranslateY(-70);
         bracket2Text.setPrefWidth(50);
 
         bracket3 = new Label("Tax rate in % for values 650,000 and over: ");
@@ -453,21 +455,20 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         bracket3Text = new TextField();
         bracket3Text.setTranslateX(140);
-        bracket3Text.setTranslateY(-40);        
+        bracket3Text.setTranslateY(-40);
         bracket3Text.setPrefWidth(50);
 
         calculateChange = new Button("Calculate Change");
         GridPane.setHalignment(calculateChange, HPos.CENTER);
         calculateChange.setOnAction(this);
 
-        change = new Text();        
+        change = new Text();
         change.setTranslateY(100);
 
         backFromChanges = new Button("Back");
         backFromChanges.setTranslateX(-50);
         backFromChanges.setTranslateY(-200);
         backFromChanges.setOnAction(this);
-
 
         // Admin Statistics
 
@@ -500,6 +501,20 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         routingKeyError.setFill(Color.RED);
         routingKeyError.setVisible(false);
 
+        backOverdue = new Button("Back");
+        backOverdue.setTranslateX(300 / 2);
+        backOverdue.setTranslateY(-400 / 2);
+        backOverdue.setOnAction(this);
+
+        // Admin overdue back button
+        backOverdue1 = new Button("Back");
+        backOverdue1.setTranslateX(300 / 2);
+        backOverdue1.setTranslateY(-400 / 2);
+        backOverdue1.setOnAction(this);
+
+        AdminOverdueGridPane.getChildren().add(adminOverduePane);
+        AdminOverdueGridPane.getChildren().add(backOverdue1);
+
         AdminInvestigateChangePane.getChildren().add(bracket1);
         AdminInvestigateChangePane.getChildren().add(bracket2);
         AdminInvestigateChangePane.getChildren().add(bracket3);
@@ -516,11 +531,6 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         AdminStatsPane.getChildren().add(statistics);
         AdminStatsPane.getChildren().add(BackFromStats);
         AdminStatsPane.getChildren().add(routingKeyError);
-
-        backOverdue = new Button("Back");
-        backOverdue.setTranslateX(300 / 2);
-        backOverdue.setTranslateY(-400 / 2);
-        backOverdue.setOnAction(this);
 
         AdminOverPropPane.getChildren().add(EnterYear);
         AdminOverPropPane.getChildren().add(year);
@@ -781,68 +791,77 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             ArrayList<Text> AdminPaymentsTemp = new ArrayList<Text>();
 
             if (areaCodeText.getText().length() == 3) {
-                AdminPayments = Utils.findPaymentsByRoutingKey(areaCodeText.getText());
+                String key = areaCodeText.getText();
+                AdminPayments = Utils.findPaymentsByRoutingKey(key);
+            } else {
+                AdminPayments = Utils.findPaymentsByRoutingKey(",");
             }
+            int i = 0;
             int o = -150;
-            for (int i = 0; i < AdminPayments.size(); i++) {
-
+            for (i = 0; i < AdminPayments.size(); i++) {
                 if (AdminPayments.get(i).getYear() == Integer.parseInt(year.getText())) {
+
                     AdminPaymentsTemp.add(new Text(AdminPayments.get(i).toString()));
-                    o += 30;
+                    AdminPaymentsTemp.get(i).setTranslateY(o - 15);
                     AdminOverdueGroup.getChildren().add(AdminPaymentsTemp.get(i));
+                    o += 70;
+                } else {
+                    AdminPaymentsTemp.add(null);
                 }
+
             }
             adminOverduePane.setContent(AdminOverdueGroup);
             window.setScene(adminOverdueScene);
+            AdminPayments.clear();
+            AdminPaymentsTemp.clear();
         }
 
-        if(event.getSource() == PropertyStats){
-            window.setScene(AdminStatsScene);             
+        if (event.getSource() == PropertyStats) {
+            window.setScene(AdminStatsScene);
         }
 
-        if(event.getSource() == investigateChanges){
+        if (event.getSource() == investigateChanges) {
             window.setScene(AdminInvestigateChangeScene);
         }
 
-        if(event.getSource() == getStats){
-            if(routingKeyText.getText().length() == 3){
+        if (event.getSource() == getStats) {
+            if (routingKeyText.getText().length() == 3) {
                 routedPayments = Utils.findPaymentsByRoutingKey(routingKeyText.getText().toUpperCase());
                 double total = 0;
                 double count = 0;
-                for(Payment p : routedPayments){
-                    if(p.isPaid()){
+                for (Payment p : routedPayments) {
+                    if (p.isPaid()) {
                         total = total + p.getAmount();
                         count++;
                     }
                 }
-                
-                
-                for(Payment p : routedPayments){
-                    if(p.isPaid()){
+
+                for (Payment p : routedPayments) {
+                    if (p.isPaid()) {
                         total = total + p.getAmount();
-                        
+
                     }
-                }            
-                statistics.setText("Total tax paid for this area: €" + total + "\n" +
-                "Average tax paid for this area: €" + String.format("%.2f",(total / count)) + "\n" +
-                ((int)count) + "/" + routedPayments.size() + " payments made.\n" + 
-                    "" + String.format("%.2f",((double)count / (double)routedPayments.size())*100) + "% payment rate.\n"
-                );
+                }
+                statistics.setText("Total tax paid for this area: €" + total + "\n"
+                        + "Average tax paid for this area: €" + String.format("%.2f", (total / count)) + "\n"
+                        + ((int) count) + "/" + routedPayments.size() + " payments made.\n" + ""
+                        + String.format("%.2f", ((double) count / (double) routedPayments.size()) * 100)
+                        + "% payment rate.\n");
                 routingKeyError.setVisible(false);
                 BackFromStats.setTranslateX(-40);
                 routingKey.setTranslateX(-90);
-            }
-            else{
+            } else {
                 routingKeyError.setVisible(true);
             }
         }
 
-        if(event.getSource() == calculateChange){
-            if(Utils.containsOnlyNumbers(bracket1Text.getText())){
-                double[] rates = {0.0, Double.parseDouble(bracket1Text.getText()), Double.parseDouble(bracket2Text.getText()), Double.parseDouble(bracket3Text.getText())};
+        if (event.getSource() == calculateChange) {
+            if (Utils.containsOnlyNumbers(bracket1Text.getText())) {
+                double[] rates = { 0.0, Double.parseDouble(bracket1Text.getText()),
+                        Double.parseDouble(bracket2Text.getText()), Double.parseDouble(bracket3Text.getText()) };
                 ArrayList<Payment> newPaymentData = new ArrayList<Payment>();
-                for(User u : ((Admin)user).getUsers()){
-                    for(Property p : ((PropertyOwner)u).getPropertyList()){
+                for (User u : ((Admin) user).getUsers()) {
+                    for (Property p : ((PropertyOwner) u).getPropertyList()) {
                         TaxCalculator calculator = new TaxCalculator(p);
                         calculator.setBrackets(rates);
                         Payment pay = new Payment(2020, 0, false);
@@ -853,13 +872,14 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
                 Collections.sort(newPaymentData);
                 double total = 0;
-                for(Payment p : newPaymentData){
+                for (Payment p : newPaymentData) {
                     total = total + p.getAmount();
                 }
-                
-                change.setText("Total tax to be collected with these rates: €" + String.format("%.2f", total) + "\n" +
-                            "Mean tax payment: €" + String.format("%.2f", (total / newPaymentData.size())) + "\n" +
-                            "Median tax payment: €" + String.format("%.2f", newPaymentData.get(newPaymentData.size() / 2).getAmount()) + "\n");
+
+                change.setText("Total tax to be collected with these rates: €" + String.format("%.2f", total) + "\n"
+                        + "Mean tax payment: €" + String.format("%.2f", (total / newPaymentData.size())) + "\n"
+                        + "Median tax payment: €"
+                        + String.format("%.2f", newPaymentData.get(newPaymentData.size() / 2).getAmount()) + "\n");
                 bracket1.setTranslateX(-40);
                 bracket2.setTranslateX(-40);
                 bracket3.setTranslateX(-40);
@@ -928,7 +948,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             window.setScene(HomeScene);
         }
 
-        if (event.getSource() == BackFromStats){
+        if (event.getSource() == BackFromStats) {
             routingKeyText.clear();
             statistics.setText("");
             routingKeyError.setVisible(false);
@@ -937,7 +957,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             window.setScene(AdminPannelScene);
         }
 
-        if (event.getSource() == backFromChanges){
+        if (event.getSource() == backFromChanges) {
             bracket1Text.clear();
             bracket2Text.clear();
             bracket3Text.clear();
@@ -954,6 +974,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         if (event.getSource() == backOverdue) {
             window.setScene(AdminPannelScene);
+        }
+        if (event.getSource() == backOverdue1) {
+            window.setScene(AdminPannelScene);
+            AdminOverdueGroup.getChildren().clear();
+            year.clear();
+            areaCodeText.clear();
         }
     }
 
