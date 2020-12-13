@@ -17,7 +17,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import jdk.jshell.execution.Util;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 
@@ -27,11 +26,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             AdminUsersScene, AdminOverPropScene, AdminStatsScene, AdminInvestigateChangeScene, AdminPropScene, AdminViewPropScene, adminOverdueScene;
     Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew, BackToLogin,
             BackFromViewProp, BackFromRegister, BackFromProp, AdminLogout, ViewUsers, PropertyStats, GetPropTaxOwner,
-            OverduePropTax, Search, getStats, BackFromStats, investigateChanges, calculateChange, backFromChanges;
+            OverduePropTax, Search, getStats, BackFromStats, investigateChanges, calculateChange, backFromChanges,
+            backOverdue;
     GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropRoot, propRoot, AdminPannelPane,
             AdminOverPropPane, AdminStatsPane, AdminInvestigateChangePane;
-    ScrollPane viewpropPane, propPane, AdminUsersPane;
-    Group viewpropGroup, paymentsGroup, AdminUsersGroup;       
+    ScrollPane viewpropPane, propPane, AdminUsersPane, AdminPropPane, AdminViewPropPane, adminOverduePane;
+    Group viewpropGroup, paymentsGroup, AdminUsersGroup, AdminPropGroup, AdminOverdueGroup;       
     
     Text createError, loginError, details, statistics, routingKeyError, change;
     Label routingKey, bracket1, bracket2, bracket3;
@@ -55,6 +55,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     private ArrayList<Button> viewUser = new ArrayList<Button>();
     private ArrayList<Payment> routedPayments;
     Payment p;
+     
 
     @Override
     public void start(Stage primaryStage) {
