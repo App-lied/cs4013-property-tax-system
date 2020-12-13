@@ -792,8 +792,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                     PrintWriter pw = new PrintWriter(bw);
                     pw.print("\n" + NewUsername.getText() + "," + newpassInput.getText() + ",false");
                     pw.close();
-                } catch (IOException e) {
-                    System.out.println("An error has occurred");
+                } catch (IOException e) {                    
                     e.printStackTrace();
                 }
                 createError.setVisible(false);
@@ -901,8 +900,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             }
 
         } else {
-            loginError.setVisible(true);
-            System.out.println("\nLogin Failed. Invalid Username or Password");
+            loginError.setVisible(true);            
         }
     }
 
@@ -925,10 +923,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                     details.setTranslateY(-75);
                     details.setScaleX(1.25);
                     details.setScaleY(1.25);
-                    propRoot.getChildren().add(details);
-                    System.out.println(viewedProperty);
+                    propRoot.getChildren().add(details);                    
                     window.setScene(propScene);
-                    int k, n = 0;
+                    int k = 0;
                     int o = 100;
                     for (k = 0; k < viewedProperty.getPaymentList().size(); k++) {
                         final int m = k;
