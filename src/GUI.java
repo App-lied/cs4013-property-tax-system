@@ -43,8 +43,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     private static String[] locations = { "Countryside", "Village", "Small Town", "Large Town", "City" };
     static File source = new File("src/lib/users/userlogin.csv");
     User user;
-    private ArrayList<Text> addresses = new ArrayList<Text>();
-    private ArrayList<Text> viewAdresses = new ArrayList<Text>();
+    private ArrayList<Text> addresses = new ArrayList<Text>();    
     private ArrayList<Text> payments = new ArrayList<Text>();
     private ArrayList<Button> buttons = new ArrayList<Button>();
     private ArrayList<Button> pay = new ArrayList<Button>();
@@ -52,8 +51,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     private PropertyOwner viewedUser;
     Admin admin;
     private ArrayList<Text> userlist = new ArrayList<Text>();
-    private ArrayList<Button> viewUser = new ArrayList<Button>();
-    private ArrayList<Button> viewProp = new ArrayList<Button>();
+    private ArrayList<Button> viewUser = new ArrayList<Button>();    
     private ArrayList<Payment> routedPayments;
     Payment p;
 
@@ -121,7 +119,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         AdminStatsScene = new Scene(AdminStatsPane, 420, 500);
         AdminInvestigateChangeScene = new Scene(AdminInvestigateChangePane, 420, 500);
         AdminPropScene = new Scene(AdminPropPane, 420, 500);        
-        adminOverdueScene = new Scene(adminOverduePane, 420, 500);
+        adminOverdueScene = new Scene(AdminOverdueGridPane, 420, 500);
 
         // Login heading
         Text loginHeading = new Text("Login");
