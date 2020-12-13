@@ -63,7 +63,7 @@ public class Utils {
         int i;        
         for(i = 0; i < s.length(); i++){
             if (!(s.charAt(i) >= '0'
-                && s.charAt(i) <= '9')) { 
+                && s.charAt(i) <= '9') && !(s.charAt(i) == '.')) { 
                 return false;
             } 
             

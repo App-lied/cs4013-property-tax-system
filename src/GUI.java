@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -21,18 +23,20 @@ import javafx.geometry.Pos;
 public class GUI extends Application implements EventHandler<ActionEvent> {
     Stage window;
     Scene loginScene, HomeScene, CreateScene, RegisterScene, ConfirmScene, ViewPropScene, propScene, AdminPannelScene,
-            AdminUsersScene, AdminOverPropScene;
+            AdminUsersScene, AdminOverPropScene, AdminStatsScene, AdminInvestigateChangeScene;
     Button RegisterProp, ViewProp, Logout, btLogin, btCreate, Confirm, BackMain, CreateNew, BackToLogin,
             BackFromViewProp, BackFromRegister, BackFromProp, AdminLogout, ViewUsers, PropertyStats, GetPropTaxOwner,
-            OverduePropTax, Search;
+            OverduePropTax, Search, getStats, BackFromStats, investigateChanges, calculateChange, backFromChanges;
     GridPane createPane, loginPane, homePane, registerPane, confirmPane, viewpropRoot, propRoot, AdminPannelPane,
-            AdminOverPropPane;
+            AdminOverPropPane, AdminStatsPane, AdminInvestigateChangePane;
     ScrollPane viewpropPane, propPane, AdminUsersPane;
     Group viewpropGroup, paymentsGroup, AdminUsersGroup;
 
-    Text createError, loginError, details;
+    Text createError, loginError, details, statistics, routingKeyError, change;
+    Label routingKey, bracket1, bracket2, bracket3;
     private PasswordField passInput, newpassInput;
-    private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, NewUsername, year, areaCodeText;
+    private TextField nameInput, OwnerIn, AddressIn, PostcodeIn, MarketValIn, NewUsername, year, areaCodeText, routingKeyText, bracket1Text,
+    bracket2Text, bracket3Text;
     private CheckBox PrincipalResIn;
     private ComboBox<String> LocationCatIn;
     private static String[] locations = { "Countryside", "Village", "Small Town", "Large Town", "City" };
@@ -46,6 +50,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     Admin admin;
     private ArrayList<Text> userlist = new ArrayList<Text>();
     private ArrayList<Button> viewUser = new ArrayList<Button>();
+    private ArrayList<Payment> routedPayments;
 
     @Override
     public void start(Stage primaryStage) {
@@ -62,6 +67,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         viewpropRoot = new GridPane();
         AdminUsersPane = new ScrollPane();
         AdminOverPropPane = new GridPane();
+        AdminStatsPane = new GridPane();
+        AdminInvestigateChangePane = new GridPane();
         viewpropPane = new ScrollPane();
         viewpropPane.setPrefSize(400, 300);
         viewpropGroup = new Group();
@@ -86,6 +93,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         propRoot.setAlignment(Pos.CENTER);
         AdminPannelPane.setAlignment(Pos.CENTER);
         AdminOverPropPane.setAlignment(Pos.CENTER);
+        AdminStatsPane.setAlignment(Pos.CENTER);
+        AdminInvestigateChangePane.setAlignment(Pos.CENTER);
 
         CreateScene = new Scene(createPane, 420, 500);
         loginScene = new Scene(loginPane, 420, 500);
@@ -97,6 +106,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         AdminPannelScene = new Scene(AdminPannelPane, 420, 500);
         AdminUsersScene = new Scene(AdminUsersPane, 420, 500);
         AdminOverPropScene = new Scene(AdminOverPropPane, 420, 500);
+        AdminStatsScene = new Scene(AdminStatsPane, 420, 500);
+        AdminInvestigateChangeScene = new Scene(AdminInvestigateChangePane, 420, 500);
 
         // Login heading
         Text loginHeading = new Text("Login");
@@ -324,7 +335,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         createError.setTranslateY(100);
 
         // This is the Admin pannel
-        Text AdminPannelText = new Text("Admin Pannel");
+        Text AdminPannelText = new Text("Admin Panel");
         GridPane.setHalignment(AdminPannelText, HPos.CENTER);
         AdminPannelText.setTranslateY(-180);
         AdminPannelText.setScaleX(2);
@@ -332,8 +343,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         AdminLogout = new Button();
         AdminLogout.setText("Logout");
-        AdminLogout.setTranslateX(300 / 2);
-        AdminLogout.setTranslateY(-400 / 2);
+        AdminLogout.setTranslateX(200);
+        AdminLogout.setTranslateY(-220);
         AdminLogout.setOnAction(this);
 
         // Property buttons for admin
@@ -361,13 +372,21 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         OverduePropTax.setScaleY(1.25);
         OverduePropTax.setOnAction(this);
 
+        investigateChanges = new Button();
+        investigateChanges.setText("Investigate Changes to Tax Rates");
+        investigateChanges.setTranslateY(20);
+        GridPane.setHalignment(investigateChanges, HPos.CENTER);
+        investigateChanges.setScaleX(1.25);
+        investigateChanges.setScaleY(1.25);
+        investigateChanges.setOnAction(this);
+
         PropertyStats = new Button();
         PropertyStats.setText("Property Statistics");
-        PropertyStats.setTranslateY(20);
+        PropertyStats.setTranslateY(60);
         GridPane.setHalignment(PropertyStats, HPos.CENTER);
         PropertyStats.setScaleX(1.25);
         PropertyStats.setScaleY(1.25);
-        PropertyStats.setOnAction(this);
+        PropertyStats.setOnAction(this);                
 
         // Admin Overdue prop tax
 
@@ -397,6 +416,94 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         Search.setTranslateY(140);
         Search.setOnAction(this);
 
+        bracket1 = new Label("Tax rate in % for values 150,000 - 100,000: ");
+        bracket1.setTranslateX(-90);
+        bracket1.setTranslateY(-100);
+
+        bracket1Text = new TextField();
+        bracket1Text.setTranslateX(140);
+        bracket1Text.setTranslateY(-100);
+        bracket1Text.setPrefWidth(50);
+
+        bracket2 = new Label("Tax rate in % for values 400,000 - 650,000: ");
+        bracket2.setTranslateX(-90);
+        bracket2.setTranslateY(-70);
+
+        bracket2Text = new TextField();
+        bracket2Text.setTranslateX(140);
+        bracket2Text.setTranslateY(-70);        
+        bracket2Text.setPrefWidth(50);
+
+        bracket3 = new Label("Tax rate in % for values 650,000 and over: ");
+        bracket3.setTranslateX(-90);
+        bracket3.setTranslateY(-40);
+
+        bracket3Text = new TextField();
+        bracket3Text.setTranslateX(140);
+        bracket3Text.setTranslateY(-40);        
+        bracket3Text.setPrefWidth(50);
+
+        calculateChange = new Button("Calculate Change");
+        GridPane.setHalignment(calculateChange, HPos.CENTER);
+        calculateChange.setOnAction(this);
+
+        change = new Text();        
+        change.setTranslateY(100);
+
+        backFromChanges = new Button("Back");
+        backFromChanges.setTranslateX(-50);
+        backFromChanges.setTranslateY(-200);
+        backFromChanges.setOnAction(this);
+
+
+        // Admin Statistics
+
+        routingKey = new Label("Enter the 3 character eircode \n routing key to search by:");
+        routingKey.setTranslateX(-100);
+        routingKey.setTranslateY(-100);
+
+        routingKeyText = new TextField();
+        routingKeyText.setTranslateX(100);
+        routingKeyText.setTranslateY(-100);
+
+        getStats = new Button("Get Statistics");
+        GridPane.setHalignment(getStats, HPos.CENTER);
+        getStats.setOnAction(this);
+
+        statistics = new Text();
+        statistics.setScaleX(1.15);
+        statistics.setScaleY(1.15);
+        statistics.setTranslateX(-70);
+        statistics.setTranslateY(100);
+
+        BackFromStats = new Button("Back");
+        BackFromStats.setTranslateX(-50);
+        BackFromStats.setTranslateY(-200);
+        BackFromStats.setOnAction(this);
+
+        routingKeyError = new Text("Invalid routing key");
+        routingKeyError.setTranslateX(100);
+        routingKeyError.setTranslateY(-80);
+        routingKeyError.setFill(Color.RED);
+        routingKeyError.setVisible(false);
+
+        AdminInvestigateChangePane.getChildren().add(bracket1);
+        AdminInvestigateChangePane.getChildren().add(bracket2);
+        AdminInvestigateChangePane.getChildren().add(bracket3);
+        AdminInvestigateChangePane.getChildren().add(bracket1Text);
+        AdminInvestigateChangePane.getChildren().add(bracket2Text);
+        AdminInvestigateChangePane.getChildren().add(bracket3Text);
+        AdminInvestigateChangePane.getChildren().add(calculateChange);
+        AdminInvestigateChangePane.getChildren().add(change);
+        AdminInvestigateChangePane.getChildren().add(backFromChanges);
+
+        AdminStatsPane.getChildren().add(routingKey);
+        AdminStatsPane.getChildren().add(routingKeyText);
+        AdminStatsPane.getChildren().add(getStats);
+        AdminStatsPane.getChildren().add(statistics);
+        AdminStatsPane.getChildren().add(BackFromStats);
+        AdminStatsPane.getChildren().add(routingKeyError);
+
         AdminOverPropPane.getChildren().add(EnterYear);
         AdminOverPropPane.getChildren().add(year);
         AdminOverPropPane.getChildren().add(areaCode);
@@ -409,6 +516,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         AdminPannelPane.getChildren().add(ViewUsers);
         AdminPannelPane.getChildren().add(GetPropTaxOwner);
         AdminPannelPane.getChildren().add(OverduePropTax);
+        AdminPannelPane.getChildren().add(investigateChanges);
         AdminPannelPane.getChildren().add(PropertyStats);
 
         viewpropRoot.getChildren().add(Properties);
@@ -472,9 +580,11 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             nameInput.clear();
             passInput.clear();
         }
+
         if (event.getSource() == RegisterProp) {
             window.setScene(RegisterScene);
         }
+
         if (event.getSource() == Confirm) {
             String address = AddressIn.getText();
             String[] addressSplit = address.split(",");
@@ -504,9 +614,11 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                 window.setScene(ConfirmScene);
             }
         }
+
         if (event.getSource() == BackMain) {
             window.setScene(HomeScene);
         }
+
         if (event.getSource() == ViewProp) {
             int i;
             int j = -130;
@@ -574,7 +686,6 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             viewpropPane.setContent(viewpropGroup);
             window.setScene(ViewPropScene);
         }
-
         if (event.getSource() == ViewUsers) {
             int i;
             int j = -130;
@@ -604,10 +715,85 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
          * if (event.getSource() == Search){ for(int i = 0; i < ) }
          */
 
+        if(event.getSource() == PropertyStats){
+            window.setScene(AdminStatsScene);             
+        }
+
+        if(event.getSource() == investigateChanges){
+            window.setScene(AdminInvestigateChangeScene);
+        }
+
+        if(event.getSource() == getStats){
+            if(routingKeyText.getText().length() == 3){
+                routedPayments = Utils.findPaymentsByRoutingKey(routingKeyText.getText().toUpperCase());
+                double total = 0;
+                double count = 0;
+                for(Payment p : routedPayments){
+                    if(p.isPaid()){
+                        total = total + p.getAmount();
+                        count++;
+                    }
+                }
+                
+                
+                for(Payment p : routedPayments){
+                    if(p.isPaid()){
+                        total = total + p.getAmount();
+                        
+                    }
+                }            
+                statistics.setText("Total tax paid for this area: €" + total + "\n" +
+                "Average tax paid for this area: €" + String.format("%.2f",(total / count)) + "\n" +
+                ((int)count) + "/" + routedPayments.size() + " payments made.\n" + 
+                    "" + String.format("%.2f",((double)count / (double)routedPayments.size())*100) + "% payment rate.\n"
+                );
+                routingKeyError.setVisible(false);
+                BackFromStats.setTranslateX(-40);
+                routingKey.setTranslateX(-90);
+            }
+            else{
+                routingKeyError.setVisible(true);
+            }
+        }
+
+        if(event.getSource() == calculateChange){
+            if(Utils.containsOnlyNumbers(bracket1Text.getText())){
+                double[] rates = {0.0, Double.parseDouble(bracket1Text.getText()), Double.parseDouble(bracket2Text.getText()), Double.parseDouble(bracket3Text.getText())};
+                ArrayList<Payment> newPaymentData = new ArrayList<Payment>();
+                for(User u : ((Admin)user).getUsers()){
+                    for(Property p : ((PropertyOwner)u).getPropertyList()){
+                        TaxCalculator calculator = new TaxCalculator(p);
+                        calculator.setBrackets(rates);
+                        Payment pay = new Payment(2020, 0, false);
+                        pay.setAmount(calculator.getTaxPayable(pay));
+                        newPaymentData.add(pay);
+                    }
+                }
+
+                Collections.sort(newPaymentData);
+                double total = 0;
+                for(Payment p : newPaymentData){
+                    total = total + p.getAmount();
+                }
+                
+                change.setText("Total tax to be collected with these rates: €" + String.format("%.2f", total) + "\n" +
+                            "Mean tax payment: €" + String.format("%.2f", (total / newPaymentData.size())) + "\n" +
+                            "Median tax payment: €" + String.format("%.2f", newPaymentData.get(newPaymentData.size() / 2).getAmount()) + "\n");
+                bracket1.setTranslateX(-40);
+                bracket2.setTranslateX(-40);
+                bracket3.setTranslateX(-40);
+                bracket1Text.setTranslateX(190);
+                bracket2Text.setTranslateX(190);
+                bracket3Text.setTranslateX(190);
+                backFromChanges.setTranslateX(0);
+            }
+        }
+
         if (event.getSource() == btCreate) {
             window.setScene(CreateScene);
             loginError.setVisible(false);
         }
+
         if (event.getSource() == CreateNew) {
             if (!NewUsername.getText().equals("") && !newpassInput.getText().equals("")) {
                 try {
@@ -627,6 +813,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
             }
 
         }
+
         if (event.getSource() == btLogin) {
             try {
                 loginError.setVisible(false);
@@ -635,10 +822,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                 e1.printStackTrace();
             }
         }
+
         if (event.getSource() == BackToLogin) {
             window.setScene(loginScene);
             createError.setVisible(false);
         }
+
         if (event.getSource() == BackFromViewProp) {
             window.setScene(HomeScene);
             viewpropGroup.getChildren().clear();
@@ -656,6 +845,30 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
         if (event.getSource() == BackFromRegister) {
             window.setScene(HomeScene);
+        }
+
+        if (event.getSource() == BackFromStats){
+            routingKeyText.clear();
+            statistics.setText("");
+            routingKeyError.setVisible(false);
+            BackFromStats.setTranslateX(-20);
+            routingKey.setTranslateX(-20);
+            window.setScene(AdminPannelScene);
+        }
+
+        if (event.getSource() == backFromChanges){
+            bracket1Text.clear();
+            bracket2Text.clear();
+            bracket3Text.clear();
+            change.setText("");
+            window.setScene(AdminPannelScene);
+            bracket1.setTranslateX(-90);
+            bracket2.setTranslateX(-90);
+            bracket3.setTranslateX(-90);
+            bracket1Text.setTranslateX(140);
+            bracket2Text.setTranslateX(140);
+            bracket3Text.setTranslateX(140);
+            backFromChanges.setTranslateX(-50);
         }
     }
 
