@@ -1,12 +1,37 @@
 Git-Hub Link:
 https://github.com/App-lied/cs4013-property-tax-system
-To Run the CLI:
-ls into the directory then:
-compile using: javac Main.java
-run using: java Main
 
-If you have javafx library files follow the steps below:
-To run the GUI:
-ls into the directory then:
-compile using: javac GUI.java
-run using: java GUI
+1) COMPILATION INSTRUCTIONS
+
+from inside the 'src' directory:
+javac -d .. Main.java
+javac -d .. GUI.java
+
+2) EXECUTION INSTRUCTIONS
+
+from the head directory (where the .class files are following compilation):
+To run command line interface:
+	java Main
+To run GUI:
+	java GUI
+
+
+
+
+For Java SDK versions where JavaFX is not natively supported (Java 9 and later):
+Replace [path-to-jfx] in the following instructions with your filepath to the JavaFX library
+
+
+1) COMPILATION INSTRUCTIONS
+
+from inside the 'src' directory:
+javac -d .. Main.java
+javac --module-path [path-to-jfx]/lib --add-modules javafx.controls,javafx.fxml -d .. GUI.java
+
+2) EXECUTION INSTRUCTIONS
+
+from the head directory (where the .class files are following compilation):
+To run command line interface:
+	java Main
+To run GUI:
+	java --module-path [path-to-jfx]/lib --add-modules javafx.controls,javafx.fxml GUI
